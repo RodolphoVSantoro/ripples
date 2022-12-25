@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import request_file from "@src/components/request_files/index.vue";
+import request_file from "@/components/request_files/index.vue";
 </script>
 
 <template>

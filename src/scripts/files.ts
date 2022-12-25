@@ -5,10 +5,12 @@ export type FileTree = Folder | File;
 export class File {
     name: string;
     path: string;
+    children: never[];
     constructor(params:{name: string, path: string}) {
         const { name, path } = params;
         this.name = name;
         this.path = path;
+        this.children = [];
     }
     
     isFile(): boolean {
@@ -25,12 +27,15 @@ export class File {
     async delete(): Promise<void> {}
 }
 
-export class Folder extends File {
+export class Folder {
+    name: string;
+    path: string;
     children: FileTree[];
 
     constructor(params:{name: string, path: string, children: FileTree[]}) {
         const { name, path, children } = params;
-        super({name, path});
+        this.name = name;
+        this.path = path;
         this.children = children;
     }
 
@@ -58,6 +63,16 @@ export async function getFileTree(): Promise<FileTree[]> {
             name: "test3",
             path: "test3",
         }),
+        new Folder({
+            name: "test5",
+            path: "test5",
+            children: [
+                new File({
+                    name: "test6",
+                    path: "test6",
+                }),
+            ],
+        })
         ],
     }),
     new Folder({

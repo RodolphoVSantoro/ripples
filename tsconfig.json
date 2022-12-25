@@ -13,7 +13,9 @@
     "lib": ["ESNext", "DOM"],
     "skipLibCheck": true,
     "paths": {
-      "@src/*": ["./src/*"],
+      "@": ["./src"],
+      "@/*": ["./src/*"],
+      "@rust": ["./src-tauri"],
       "@rust/*": ["./src-tauri/*"]
     }
   },
