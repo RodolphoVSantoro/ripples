@@ -11,11 +11,11 @@ getFileTree().then((tree) => {
 </script>
 
 <template>
-  <div class="container">
-    <ol>
-      <div v-for="tree in fileTree">
-        <file_tree v-bind:file-tree="tree"/>
-      </div>
-    </ol>
-  </div>
+  <v-app-bar class="overflow-x-auto" max-width="10px">
+      <ol>
+        <div v-for="tree in fileTree">
+          <file_tree v-bind:file-tree="tree"/>
+        </div>
+      </ol>
+  </v-app-bar>
 </template>

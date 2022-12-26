@@ -42,6 +42,10 @@ export class Folder {
     isFile(): boolean {
         return false;
     }
+
+    async getContents(): Promise<string> {
+        throw new Error("Cannot get contents of a folder");
+    }
     
     async save(): Promise<void> {}
     async delete(): Promise<void> {}
@@ -70,6 +74,23 @@ export async function getFileTree(): Promise<FileTree[]> {
                 new File({
                     name: "test6",
                     path: "test6",
+                }),
+                new Folder({
+                    name: "test7",
+                    path: "test7",
+                    children: [
+                        new Folder({
+                            name: "test8",
+                            path: "test8",
+                            children: [
+                                new Folder({
+                                    name: "test9",
+                                    path: "test9",
+                                    children: [],
+                            }),
+                        ]
+                    }),
+                    ],
                 }),
             ],
         })

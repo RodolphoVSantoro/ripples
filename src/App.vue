@@ -1,15 +1,15 @@
 <script setup lang="ts">
 import request_file from "@/components/request_files/index.vue";
+import request_editor from "@/components/request_editor/index.vue";
 </script>
 
 <template>
-  <div class="container">
-
-    <h1>Simple requests prototype</h1>
-  
+  <v-app>
     <request_file/>
-  
-  </div>
+    <v-main>
+      <request_editor/>
+    </v-main>
+  </v-app>
 </template>
 
 <style scoped>
