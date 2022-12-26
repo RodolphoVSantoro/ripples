@@ -6,13 +6,24 @@ import config_bar from "@/components/config_bar/index.vue";
 </script>
 
 <template>
+  
   <v-app>
-    <v-app-bar> <config_bar/> </v-app-bar>
-    <v-navigation-drawer> <request_file/> </v-navigation-drawer>
-    <v-content>
-      <request_editor/>
-    </v-content>
+  
+    <v-app-bar app> <config_bar/> </v-app-bar>
+    <v-navigation-drawer app> <request_file/> </v-navigation-drawer>
+
+    <v-main>
+      <v-container fluid>
+        
+        <request_editor/>
+
+        <response_view/>
+
+      </v-container>
+    </v-main>
+
   </v-app>
+
 </template>
 
 <style scoped>
