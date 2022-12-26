@@ -1,11 +1,9 @@
 <script setup lang="ts">
 
-
-
 </script>
 
 <template>
 
-    <v-textarea>response body here</v-textarea>
+    <v-textarea> config bar here</v-textarea>
 
 </template>
