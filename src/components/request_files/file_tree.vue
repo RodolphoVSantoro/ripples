@@ -1,36 +1,34 @@
-<script lang="ts">
-import { defineComponent, PropType } from "vue";
-import { FileTree } from "@/scripts/files";
+<script setup lang="ts">
+    import { defineComponent, PropType, ref } from "vue";
+    import { FileTree } from "@/scripts/files";
 
-export default defineComponent({
-    props: {
-        fileTree: { type: Object as PropType<FileTree>, required: true }
-    },
-    data() {
-        return {
-            showChildren: false
-        }
-    },
-});
+    const props = defineProps<{
+        fileTree: FileTree,
+    }>();
 
+    const showChildren = ref(false);
+
+    function a(){
+        console.log(showChildren.value);
+    }
 
 </script>
 
 <template>
     <div v-if="fileTree.isFile()">
-        <li @click="">A {{ fileTree.name, fileTree.path }}</li>
+        <v-list-item @click="">A {{ fileTree.name, fileTree.path }}</v-list-item>
     </div>
     <div v-else>
-        <li @click="showChildren = !showChildren">P {{ fileTree.name, fileTree.path }}</li>
-        <div v-show="showChildren">
-            <ol>
-                <div v-if="fileTree.children.length<=0">
-                    <li>Empty</li>
-                </div>
-                <div v-for="tree in fileTree.children">
+
+        <v-list-item @click="showChildren = !showChildren">P {{ fileTree.name, fileTree.path }}</v-list-item>
+
+        <div v-show="showChildren"> 
+            <v-list-item v-if="fileTree.children.length<=0">Empty</v-list-item>
+            <v-list-group v-for="tree in fileTree.children">
+                <template v-slot:activator>
                     <file_tree v-bind:file-tree="tree"/>
-                </div>
-            </ol>
+                </template>
+            </v-list-group>
         </div>
     </div>
 </template>

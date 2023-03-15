@@ -4,6 +4,6 @@
 
 <template>
 
-    <v-textarea> config bar here</v-textarea>
+    <v-textarea label="config bar here"></v-textarea>
 
 </template>
