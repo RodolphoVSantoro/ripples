@@ -3,7 +3,5 @@
 </script>
 
 <template>
-
-    <v-textarea>response url here</v-textarea>
-
+    response url here
 </template>

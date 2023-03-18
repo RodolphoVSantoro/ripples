@@ -3,7 +3,5 @@
 </script>
 
 <template>
-
-    <v-textarea label="config bar here"></v-textarea>
-
+    <p>environment selector here</p>
 </template>

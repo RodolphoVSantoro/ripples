@@ -2,6 +2,16 @@ import { invoke } from "@tauri-apps/api/tauri";
 
 export type FileTree = Folder | File;
 
+export interface FileTreeProp {
+    name: string;
+    path: string;
+    children: FileTree[] | never[];
+    isFile: () => boolean;
+    getContents: () => Promise<string>;
+    save: () => Promise<void>;
+    delete: () => Promise<void>;
+}
+
 export class File {
     name: string;
     path: string;

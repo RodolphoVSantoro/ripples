@@ -2,6 +2,6 @@
 </script>
 
 <template>
-    <v-textarea>url here</v-textarea>
-    <v-button>send</v-button>
+    <input value="Url here" style="color: white;">
+    <v-btn>send</v-btn>
 </template>
