@@ -15,11 +15,11 @@ const props = defineProps({
 const expanded = ref(false);
 
 function a() {
-    console.log('open file');
+    //TODO: implement open file
+    console.log('TODO: implement open file');
 }
 
-watch(() => props.fatherExpanded, (newValue, oldValue) => {
-    console.log(newValue, oldValue)
+watch(() => props.fatherExpanded, (newValue, _oldValue) => {
     if (newValue === false) {
         expanded.value = false
     }

@@ -12,7 +12,6 @@ enum Active {
     request
 }
 const active = ref(Active.body);
-console.log(active.value)
 </script>
 
 <template>
