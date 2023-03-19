@@ -3,28 +3,35 @@ import request_file from "@/components/request_files/index.vue"
 import environment_variables_editor from "@/components/environment_variables_editor/index.vue"
 import { computed, ref } from "vue"
 
-type MenuComponents = 'request_file' | 'environment_variables_editor'
-const componentVisibility = ref({ request_file: true, environment_variables_editor: false })
+enum MenuComponents {
+    request_file,
+    environment_variables_editor
+}
 
-function showComponent(component: MenuComponents): boolean {
-    return componentVisibility.value[component]
+const componentVisibility = ref(MenuComponents.request_file)
+
+function setShownComponent(component: MenuComponents) {
+    componentVisibility.value = component
+}
+
+function isComponentVisible(component: MenuComponents) {
+    return componentVisibility.value === component
 }
 
 </script>
 
 <template>
     <div class="menu_selector">
+        <v-btn class="selector_button" @click="setShownComponent(MenuComponents.request_file)">Requests</v-btn>
         <v-btn class="selector_button"
-            @click="componentVisibility.request_file = true; componentVisibility.environment_variables_editor = false">Requests</v-btn>
-        <v-btn class="selector_button"
-            @click="componentVisibility.request_file = false; componentVisibility.environment_variables_editor = true">Variables</v-btn>
+            @click="setShownComponent(MenuComponents.environment_variables_editor)">Variables</v-btn>
     </div>
 
     <div class="menu_selected">
-        <div v-if="showComponent('request_file')" class="menu_option">
+        <div v-if="isComponentVisible(MenuComponents.request_file)" class="menu_option">
             <request_file />
         </div>
-        <div v-if="showComponent('environment_variables_editor')" class="menu_option">
+        <div v-if="isComponentVisible(MenuComponents.environment_variables_editor)" class="menu_option">
             <environment_variables_editor />
         </div>
     </div>
@@ -42,12 +49,12 @@ function showComponent(component: MenuComponents): boolean {
     flex-direction: column;
     width: 100%;
     height: inherit;
-    overflow: auto;
+    overflow-y: auto;
 }
 
 .menu_option {
     position: relative;
-    width: 21dvw;
+    width: 100%;
     height: 100%;
 }
 

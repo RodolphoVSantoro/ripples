@@ -5,6 +5,7 @@ import body_editor from "@/components/request_editor/body_editor.vue";
 import headers_editor from "@/components/request_editor/header_editor.vue";
 import params_editor from "@/components/request_editor/param_editor.vue";
 import auth_editor from "@/components/request_editor/auth_editor.vue";
+import { ref } from "vue";
 
 enum Active {
     body,
@@ -12,7 +13,10 @@ enum Active {
     params,
     auth
 }
-let active = Active.body;
+let active = ref(Active.body);
+function setActive(newActive: Active) {
+    active.value = newActive;
+}
 
 </script>
 
@@ -20,10 +24,10 @@ let active = Active.body;
     <url_editor />
 
     <v-toolbar>
-        <v-button>body</v-button>
-        <v-button>headers</v-button>
-        <v-button>params</v-button>
-        <v-button>auth</v-button>
+        <v-btn @click="setActive(Active.body)">body</v-btn>
+        <v-btn @click="setActive(Active.auth)">auth</v-btn>
+        <v-btn @click="setActive(Active.params)">params</v-btn>
+        <v-btn @click="setActive(Active.headers)">headers</v-btn>
     </v-toolbar>
 
     <div v-if="active === Active.body">

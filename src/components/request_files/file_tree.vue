@@ -87,8 +87,8 @@ function setVisibility(visibility: boolean) {
     flex-direction: column;
     min-width: 0;
     word-wrap: break-word;
-    color: var(--color-background);
-    background-color: var(--color-primary);
+    color: white;
+    background-color: var(--color-background);
     background-clip: border-box;
     border-left: 8px solid var(--color-primary);
     padding: 0;

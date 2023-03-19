@@ -3,6 +3,17 @@ import request_editor from "@/components/request_editor/index.vue";
 import response_view from "@/components/response_view/index.vue";
 import environment_menu from "@/components/environment_menu/index.vue";
 import environment_selector from "@/components/environment_selector/index.vue";
+
+import { onMounted } from "vue";
+import { resizerFromDiv } from "@/scripts/elementResizer";
+
+onMounted(() => {
+  const resizerDiv = document.getElementById("middle_container");
+  if (!resizerDiv) {
+    throw new Error("Could not find element with id 'middle_container'");
+  }
+  window.addEventListener("load", () => resizerFromDiv(resizerDiv));
+})
 </script>
 
 <template>
@@ -11,17 +22,17 @@ import environment_selector from "@/components/environment_selector/index.vue";
     <div class="top_bar_container">
       <environment_selector />
     </div>
-    <div class="middle_container">
+    <div class="middle_container" id="middle_container">
 
-      <div class="environment_menu_container">
+      <div class="environment_menu_container horizontal_resize">
         <environment_menu />
       </div>
-
-      <div class="request_container">
+      <div class="resizer"></div>
+      <div class="request_container horizontal_resize">
         <request_editor />
       </div>
-
-      <div class="response_container">
+      <div class="resizer"></div>
+      <div class="response_container horizontal_resize">
         <response_view />
       </div>
 
@@ -53,7 +64,7 @@ import environment_selector from "@/components/environment_selector/index.vue";
   background-color: #1e1e1e;
   color: white;
   height: 95dvh;
-  min-width: 100dvh;
+  min-width: 100dvw;
 }
 
 .environment_menu_container {
@@ -61,9 +72,11 @@ import environment_selector from "@/components/environment_selector/index.vue";
   flex-direction: column;
   align-items: stretch;
   background-color: var(--color-background);
-  width: 21dvw;
+  width: 16dvw;
+  resize: horizontal;
   height: 100%;
   border: solid 2px black;
+  flex: 1 1 auto;
 }
 
 .request_container {
@@ -71,9 +84,11 @@ import environment_selector from "@/components/environment_selector/index.vue";
   flex-direction: column;
   align-items: stretch;
   background-color: var(--color-background);
-  width: 60dvw;
+  width: 47dvw;
+  resize: horizontal;
   height: 100%;
   border: solid 2px black;
+  flex: 1 1 auto;
 }
 
 .response_container {
@@ -81,8 +96,21 @@ import environment_selector from "@/components/environment_selector/index.vue";
   flex-direction: column;
   align-items: stretch;
   background-color: var(--color-background);
-  width: 18dvw;
+  width: 37dvw;
+  resize: horizontal;
   height: 100%;
   border: solid 2px black;
+  flex: 1 1 auto;
+}
+
+.resizer {
+  width: 5px;
+  height: 100%;
+  background-color: #000;
+  cursor: col-resize;
+  user-select: none;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
 }
 </style>
