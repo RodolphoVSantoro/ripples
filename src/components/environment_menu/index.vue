@@ -22,9 +22,9 @@ function isComponentVisible(component: MenuComponents) {
 
 <template>
     <div class="menu_selector">
-        <v-btn class="selector_button" @click="setShownComponent(MenuComponents.request_file)">Requests</v-btn>
-        <v-btn class="selector_button"
-            @click="setShownComponent(MenuComponents.environment_variables_editor)">Variables</v-btn>
+        <button class="selector_button" @click="setShownComponent(MenuComponents.request_file)">Requests</button>
+        <button class="selector_button"
+            @click="setShownComponent(MenuComponents.environment_variables_editor)">Variables</button>
     </div>
 
     <div class="menu_selected">
@@ -40,9 +40,24 @@ function isComponentVisible(component: MenuComponents) {
 .menu_selector {
     display: flex;
     flex-direction: row;
-    align-items: stretch;
+    justify-content: space-around;
+    background-color: white;
+    height: 5%;
     width: 100%;
 }
+
+.selector_button {
+    color: white;
+    background-color: var(--color-primary);
+    border-radius: 0.2rem;
+    width: inherit;
+    border-radius: 4px;
+    margin: 0.15rem;
+    font-size: 0.9rem;
+    font-weight: 500;
+    text-transform: uppercase;
+}
+
 
 .menu_selected {
     display: flex;
@@ -56,16 +71,5 @@ function isComponentVisible(component: MenuComponents) {
     position: relative;
     width: 100%;
     height: 100%;
-}
-
-.selector_button {
-    flex: 1;
-}
-
-.v-btn--size-default {
-    --v-btn-size: 0.875rem;
-    --v-btn-height: 36px;
-    font-size: 0.875rem;
-    padding: 0 16px;
 }
 </style>

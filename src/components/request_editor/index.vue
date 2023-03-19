@@ -23,12 +23,12 @@ function setActive(newActive: Active) {
 <template>
     <url_editor />
 
-    <v-toolbar>
-        <v-btn @click="setActive(Active.body)">body</v-btn>
-        <v-btn @click="setActive(Active.auth)">auth</v-btn>
-        <v-btn @click="setActive(Active.params)">params</v-btn>
-        <v-btn @click="setActive(Active.headers)">headers</v-btn>
-    </v-toolbar>
+    <div class="request_edition_selector">
+        <button class="request_edition_selector_option" @click="setActive(Active.body)">body</button>
+        <button class="request_edition_selector_option" @click="setActive(Active.auth)">auth</button>
+        <button class="request_edition_selector_option" @click="setActive(Active.params)">params</button>
+        <button class="request_edition_selector_option" @click="setActive(Active.headers)">headers</button>
+    </div>
 
     <div v-if="active === Active.body">
         <body_editor />
@@ -46,3 +46,25 @@ function setActive(newActive: Active) {
         <auth_editor />
     </div>
 </template>
+<style scoped>
+.request_edition_selector {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+    background-color: white;
+    height: 5%;
+    width: 100%;
+}
+
+.request_edition_selector_option {
+    color: white;
+    background-color: var(--color-primary);
+    border-radius: 0.2rem;
+    width: inherit;
+    border-radius: 4px;
+    margin: 0.15rem;
+    font-size: 0.9rem;
+    font-weight: 500;
+    text-transform: uppercase;
+}
+</style>
