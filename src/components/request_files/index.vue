@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { defineComponent, ref, Ref } from "vue";
+import { ref, Ref } from "vue";
 import file_tree from "@/components/request_files/file_tree.vue";
 import { FileTree, getFileTree } from "@/scripts/files";
 
@@ -11,11 +11,18 @@ getFileTree().then((tree) => {
 </script>
 
 <template>
-  <v-app-bar class="overflow-x-auto" max-width="10px">
-      <ol>
-        <div v-for="tree in fileTree">
-          <file_tree v-bind:file-tree="tree"/>
-        </div>
-      </ol>
-  </v-app-bar>
+  <v-list class="files_list">
+    <div v-for="tree in fileTree">
+      <file_tree v-bind:file-tree="tree" class="file_tree" />
+    </div>
+  </v-list>
 </template>
+
+<style scoped>
+.files_list {
+  padding: 0;
+  background-color: var(--color-primary);
+  height: 100%;
+  width: 100%;
+}
+</style>

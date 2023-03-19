@@ -3,7 +3,5 @@
 </script>
 
 <template>
-
-    <v-textarea>sent request here</v-textarea>
-
+    sent request here
 </template>

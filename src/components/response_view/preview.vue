@@ -5,7 +5,5 @@
 </script>
 
 <template>
-
-    <v-textarea>response body here</v-textarea>
-
+    response body here
 </template>

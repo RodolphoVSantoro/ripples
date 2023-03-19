@@ -3,5 +3,5 @@
 </script>
 
 <template>
-    response headers here
+    <p>variables editor here</p>
 </template>
