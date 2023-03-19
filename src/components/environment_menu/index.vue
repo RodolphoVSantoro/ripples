@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import request_file from "@/components/request_files/index.vue"
 import environment_variables_editor from "@/components/environment_variables_editor/index.vue"
-import { computed, ref } from "vue"
+import { ref } from "vue"
 
 enum MenuComponents {
     request_file,
