@@ -32,7 +32,7 @@ const show = true;
 
     <div class="menu_selected">
         <div v-show="isComponentVisible(MenuComponents.request_file)" class="menu_option">
-            <request_file />
+            <request_file @open-file="(filePath: string) => $emit('open-file', filePath)" />
         </div>
         <div v-show="isComponentVisible(MenuComponents.environment_variables_editor)" class="menu_option">
             <environment_variables_editor />

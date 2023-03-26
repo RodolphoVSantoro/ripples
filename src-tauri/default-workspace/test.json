@@ -4,8 +4,5 @@
     "headers": {
         "Content-Type": "application/json"
     },
-    "body": {
-        "name": "test",
-        "email": "test@test.com"
-    }
+    "body": "{ \"name\": \"test\", \"email\": \"test@test.com\" }"
 }

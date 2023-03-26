@@ -1,6 +1,25 @@
 <script setup lang="ts">
-import { onMounted, Ref, ref } from 'vue';
+import { PropType, Ref, ref, watch } from 'vue';
 import JsonEditorVue from 'json-editor-vue';
+import { JsonBody } from '@/scripts/files';
+
+const props = defineProps({
+    currentBody: {
+        type: Object as PropType<string | undefined>,
+        default: undefined,
+    },
+});
+
+const jsonBody: Ref<JsonBody | undefined> = ref(undefined);
+
+watch(() => props.currentBody, (newBody) => {
+    if (newBody) {
+        jsonBody.value = JSON.parse(newBody);
+    }
+    if (newBody === undefined) {
+        jsonBody.value = undefined;
+    }
+});
 
 enum BodyTypes {
     NO_BODY,
@@ -14,9 +33,6 @@ function setActive(newActive: BodyTypes) {
     active.value = newActive;
 }
 
-
-const jsonValue = ref()
-
 </script>
 
 <template>
@@ -28,13 +44,13 @@ const jsonValue = ref()
             <button class="body_edition_selector_option" @click="setActive(BodyTypes.TEXT)">text</button>
         </div>
         <div class="body_fields">
-            <div v-if="active === BodyTypes.NO_BODY">
+            <div v-show="active === BodyTypes.NO_BODY">
                 <div class="no_body_message">
                     No body
                 </div>
             </div>
-            <div class="body_editor" v-else-if="active === BodyTypes.JSON">
-                <JsonEditorVue class="body_json_editor" v-model="jsonValue" />
+            <div class="body_editor" v-show="active === BodyTypes.JSON">
+                <JsonEditorVue class="body_json_editor" v-model="jsonBody" />
             </div>
         </div>
     </div>

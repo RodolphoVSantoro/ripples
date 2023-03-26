@@ -28,7 +28,7 @@ fn get_environment_file_tree(state: State<Arc<Mutex<JSONWorksPace>>>) -> Result<
 }
 
 #[tauri::command]
-fn get_file_content(
+fn get_file_contents(
     state: State<Arc<Mutex<JSONWorksPace>>>,
     path: String,
 ) -> Result<String, String> {
@@ -49,7 +49,7 @@ fn main() {
         .manage(jwp_mutex)
         .invoke_handler(tauri::generate_handler![
             get_environment_file_tree,
-            get_file_content
+            get_file_contents
         ])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");

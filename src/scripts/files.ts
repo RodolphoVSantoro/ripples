@@ -44,12 +44,20 @@ interface JSONRustFileTree {
     current_name: string,
 }
 
+export interface StringRequest {
+    url: string | null,
+    method: string | null,
+    body: string | undefined,
+    headers: Record<string, string>,
+}
+
+export type JsonBody = boolean | number | string | null | { [key: string]: JsonBody } | Array<JsonBody>;
+
 export interface FileTreeProp {
     name: string;
     path: string;
     children: FileTree[] | never[];
     isFile: () => boolean;
-    getContents: () => Promise<string>;
     create: () => Promise<void>;
     delete: () => Promise<void>;
 }
@@ -67,14 +75,6 @@ export class File {
 
     isFile(): boolean {
         return true;
-    }
-
-    async getContents(): Promise<string> {
-        try {
-            return await invoke("get_file_contents", { path: this.path });
-        } catch (error: any) {
-            throw new Error(`Failed to load file contents, cause: ${error}`);
-        }
     }
 
     async create(): Promise<void> {
@@ -110,10 +110,6 @@ export class Folder {
         return false;
     }
 
-    async getContents(): Promise<string> {
-        throw new Error("Cannot get contents of a folder");
-    }
-
     async create(): Promise<void> {
         try {
             await invoke("create_file", { path: this.path });
@@ -142,5 +138,13 @@ export async function getFileTree(): Promise<FileTree[]> {
     }
     catch (error: any) {
         throw new Error(`Failed to get file tree, cause: ${error}`);
+    }
+}
+
+export async function getContents(path: string): Promise<string> {
+    try {
+        return await invoke("get_file_contents", { path });
+    } catch (error: any) {
+        throw new Error(`Failed to load file contents, cause: ${error}`);
     }
 }

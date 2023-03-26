@@ -3,9 +3,28 @@
 import url_editor from "@/components/request_editor/url_editor.vue";
 import body_editor from "@/components/request_editor/body_editor.vue";
 import headers_editor from "@/components/request_editor/header_editor.vue";
-import params_editor from "@/components/request_editor/param_editor.vue";
-import auth_editor from "@/components/request_editor/auth_editor.vue";
-import { ref } from "vue";
+import { PropType, Ref, ref, watch } from "vue";
+import { StringRequest } from "@/scripts/files";
+
+const props = defineProps({
+    currentRequest: {
+        type: Object as PropType<StringRequest | null>,
+        default: null,
+    },
+});
+
+const request: Ref<StringRequest> = ref({
+    method: null,
+    url: null,
+    headers: {},
+    body: undefined,
+});
+
+watch(() => props.currentRequest, (newRequest) => {
+    if (newRequest !== null) {
+        request.value = newRequest;
+    }
+});
 
 enum Active {
     body,
@@ -23,31 +42,25 @@ function setActive(newActive: Active) {
 
 <template>
     <div class="url_editor_container">
-        <url_editor />
+        <url_editor v-bind:current-url="request?.url ?? ''" />
+    </div>
+
+    <div>
+        {{ request?.method ?? '' }}
     </div>
 
     <div class="request_edition_selector">
         <button class="request_edition_selector_option" @click="setActive(Active.body)">body</button>
-        <button class="request_edition_selector_option" @click="setActive(Active.auth)">auth</button>
-        <button class="request_edition_selector_option" @click="setActive(Active.params)">params</button>
         <button class="request_edition_selector_option" @click="setActive(Active.headers)">headers</button>
     </div>
 
     <div class="request_editor_container">
         <div v-if="active === Active.body" class="body_editor">
-            <body_editor />
+            <body_editor v-bind:current-body="request?.body" />
         </div>
 
         <div v-else-if="active === Active.headers" class="body_editor">
-            <headers_editor />
-        </div>
-
-        <div v-else-if="active === Active.params" class="body_editor">
-            <params_editor />
-        </div>
-
-        <div v-else="active === Active.auth" class="body_editor">
-            <auth_editor />
+            <headers_editor v-bind:headers="request?.headers" />
         </div>
     </div>
 </template>

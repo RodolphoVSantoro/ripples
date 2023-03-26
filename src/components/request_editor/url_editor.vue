@@ -1,4 +1,22 @@
 <script setup lang="ts">
+
+import { PropType, Ref, ref, watch } from "vue";
+
+const props = defineProps({
+    currentUrl: {
+        type: Object as PropType<string | null>,
+        default: null,
+    },
+});
+
+const url: Ref<string | null> = ref(null);
+
+watch(() => props.currentUrl, (newUrl) => {
+    if (newUrl) {
+        url.value = newUrl;
+    }
+});
+
 const pasteFrom = [
     "url",
     "curl",
@@ -15,7 +33,7 @@ const selected = pasteFrom[0];
             paste from
         </button>
     </div>
-    <input placeholder="http://localhost:3000/test" class="url_input">
+    <input placeholder="http://localhost:3000/test" class="url_input" v-model="url">
     <button class="send_button">send</button>
 </template>
 
