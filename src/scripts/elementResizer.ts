@@ -5,11 +5,10 @@ function getChildrenElement(parent: HTMLElement, child: string): HTMLElement[] |
 
 export function resizerFromDiv(containerDiv: HTMLElement) {
     const handlers = getChildrenElement(containerDiv, 'resizer');
-    //TODO: add css class to containerDiv if any needed class is missing 
     if (!handlers || handlers.length === 0) {
         throw new Error('No handlers found');
     }
-    //TODO: add css class to handlers if any needed class is missing
+    addResizerCss(handlers);
     const boxes = getChildrenElement(containerDiv, 'horizontal_resize');
     if (!boxes || boxes.length === 0) {
         throw new Error('No boxes found');
@@ -63,13 +62,12 @@ function resizeHandlerN(parent: HTMLElement, handlers: HTMLElement[], boxes: HTM
         // Get x-coordinate of pointer relative to container
         let pointerRelativeXpos = event.clientX - containerOffsetLeft - handlerStart;
 
-        // Arbitrary minimum width set on box A, otherwise its inner content will collapse to width of 0
-        let boxAminWidth = 0;
+        // Minimum width set on the box, otherwise it to width negative widths
 
         // Resize box A
-        // * 8px is the left/right spacing between .handler and its inner pseudo-element
+        // * 2px is the left/right spacing between .handler and its inner pseudo-element
         // * Set flex-grow to 0 to prevent it from growing
-        box.style.width = String(Math.max(boxAminWidth, pointerRelativeXpos - 8)) + 'px';
+        box.style.width = String(Math.max(0, pointerRelativeXpos - 2)) + 'px';
         box.style.flexGrow = '0';
     });
 
@@ -79,7 +77,24 @@ function resizeHandlerN(parent: HTMLElement, handlers: HTMLElement[], boxes: HTM
     });
 }
 
+
+function addResizerCss(handlers: HTMLElement[]) {
+    const css = {
+        width: '2px',
+        height: '100%',
+        'background-color': '#000',
+        cursor: 'col-resize',
+        'user-select': 'none',
+        '-webkit-user-select': 'none',
+    };
+    for (let i = 0; i < handlers.length; i++) {
+        const handler = handlers[i];
+        Object.assign(handler.style, css);
+    }
+}
+
 /*
+example css that works with this script
 .wrapper {
   display: flex;
   flex-direction: row;
@@ -140,4 +155,21 @@ function resizeHandlerN(parent: HTMLElement, handlers: HTMLElement[], boxes: HTM
   -moz-user-select: none;
   -ms-user-select: none;
 }
+*/
+
+/*
+example html that works with this script and the above css
+<div class="wrapper">
+    <div class="boxA">
+        <div class="otherContent">(Content left)</div>
+    </div>
+    <div class="handler"></div>
+    <div class="boxB">
+        <div class="middle">(content)middle</div>
+    </div>
+    <div class="handler"></div>
+    <div class="boxC">
+        <div class="right">(to the right)</div>
+    </div>
+</div>
 */

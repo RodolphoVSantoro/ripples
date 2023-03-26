@@ -1,11 +1,12 @@
 <script setup lang="ts">
-import { ref, Ref } from "vue";
+import { onBeforeMount, ref, Ref } from "vue";
 import file_tree from "@/components/request_files/file_tree.vue";
 import { FileTree, getFileTree } from "@/scripts/files";
 
 const fileTree: Ref<FileTree[]> = ref([]);
-getFileTree().then((tree) => {
-  fileTree.value = tree;
+
+onBeforeMount(async () => {
+  fileTree.value = await getFileTree();
 });
 
 </script>
@@ -13,7 +14,8 @@ getFileTree().then((tree) => {
 <template>
   <v-list class="files_list">
     <div v-for="tree in fileTree">
-      <file_tree v-bind:file-tree="tree" class="file_tree" />
+      <file_tree @open-file="(filePath: string) => $emit('open-file', filePath)" v-bind:file-tree="tree"
+        class="file_tree" />
     </div>
   </v-list>
 </template>

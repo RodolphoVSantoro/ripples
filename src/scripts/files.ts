@@ -1,6 +1,48 @@
-import { invoke } from "@tauri-apps/api/tauri";
-
+import { invoke } from "@tauri-apps/api";
 export type FileTree = Folder | File;
+
+export function convertToFileTreeProp(file_tree_string: string): FileTree[] {
+    const json_rust_file_tree: JSONRustFileTree = JSON.parse(file_tree_string);
+
+    const folders = json_rust_file_tree.folder_paths.map((folderTree) => {
+        return convertJSONRustFileTreeToFileTree(folderTree);
+    });
+    const files = json_rust_file_tree.files.map((file) => {
+        const { name, path } = file;
+        return new File({
+            name,
+            path,
+        });
+    });
+    return [...folders, ...files];
+}
+
+function convertJSONRustFileTreeToFileTree(json_rust_file_tree: JSONRustFileTree): FileTree {
+    const children = [
+        ...json_rust_file_tree.files.map((file) => {
+            const { name, path } = file;
+            return new File({
+                name,
+                path,
+            });
+        }),
+    ];
+    return new Folder({
+        name: json_rust_file_tree.current_name,
+        path: json_rust_file_tree.current_path,
+        children: children,
+    });
+}
+
+interface JSONRustFileTree {
+    folder_paths: JSONRustFileTree[],
+    files: {
+        name: string,
+        path: string,
+    }[],
+    current_path: string,
+    current_name: string,
+}
 
 export interface FileTreeProp {
     name: string;
@@ -8,7 +50,7 @@ export interface FileTreeProp {
     children: FileTree[] | never[];
     isFile: () => boolean;
     getContents: () => Promise<string>;
-    save: () => Promise<void>;
+    create: () => Promise<void>;
     delete: () => Promise<void>;
 }
 
@@ -28,13 +70,28 @@ export class File {
     }
 
     async getContents(): Promise<string> {
-        //TODO: Get from rust
-        return `file contents of ${this.path}`;
+        try {
+            return await invoke("get_file_contents", { path: this.path });
+        } catch (error: any) {
+            throw new Error(`Failed to load file contents, cause: ${error}`);
+        }
     }
 
-    async save(): Promise<void> { }
+    async create(): Promise<void> {
+        try {
+            await invoke("create_file", { path: this.path });
+        } catch (error: any) {
+            throw new Error(`Failed to create file, cause: ${error}`);
+        }
+    }
 
-    async delete(): Promise<void> { }
+    async delete(): Promise<void> {
+        try {
+            await invoke("delete_file", { path: this.path });
+        } catch (error: any) {
+            throw new Error(`Failed to delete file, cause: ${error}`);
+        }
+    }
 }
 
 export class Folder {
@@ -57,127 +114,33 @@ export class Folder {
         throw new Error("Cannot get contents of a folder");
     }
 
-    async save(): Promise<void> { }
-    async delete(): Promise<void> { }
+    async create(): Promise<void> {
+        try {
+            await invoke("create_file", { path: this.path });
+        } catch (error: any) {
+            throw new Error(`Failed to create file, cause: ${error}`);
+        }
+    }
+
+    async delete(): Promise<void> {
+        try {
+            await invoke("delete_file", { path: this.path });
+        } catch (error: any) {
+            throw new Error(`Failed to delete file, cause: ${error}`);
+        }
+    }
 }
 
-// Gets saved files and folders from rust
 export async function getFileTree(): Promise<FileTree[]> {
-    //TODO: Get from rust
-    return [
-        new File({
-            name: "test",
-            path: "test",
-        }),
-        new Folder({
-            name: "test2",
-            path: "test2",
-            children: [
-                new File({
-                    name: "test3",
-                    path: "test3",
-                }),
-                new Folder({
-                    name: "test5",
-                    path: "test5",
-                    children: [
-                        new File({
-                            name: "test6",
-                            path: "test6",
-                        }),
-                        new Folder({
-                            name: "test7",
-                            path: "test7",
-                            children: [
-                                new Folder({
-                                    name: "test8",
-                                    path: "test8",
-                                    children: [
-                                        new Folder({
-                                            name: "test9",
-                                            path: "test9",
-                                            children: [],
-                                        }),
-                                    ]
-                                }),
-                            ],
-                        }),
-                    ],
-                })
-            ],
-        },
-        ),
-        new Folder({
-            name: "test4",
-            path: "test4",
-            children: [],
-        }),
-        new File({
-            name: "test",
-            path: "test",
-        }),
-        new Folder({
-            name: "test2",
-            path: "test2",
-            children: [
-                new File({
-                    name: "test3",
-                    path: "test3",
-                }),
-                new Folder({
-                    name: "test5",
-                    path: "test5",
-                    children: [
-                        new File({
-                            name: "test6",
-                            path: "test6",
-                        }),
-                        new Folder({
-                            name: "test7",
-                            path: "test7",
-                            children: [
-                                new Folder({
-                                    name: "test8",
-                                    path: "test8",
-                                    children: [
-                                        new Folder({
-                                            name: "test9",
-                                            path: "test9",
-                                            children: [],
-                                        }),
-                                    ]
-                                }),
-                            ],
-                        }),
-                    ],
-                }), new Folder({
-                    name: "test5",
-                    path: "test5",
-                    children: [
-                        new File({
-                            name: "test6",
-                            path: "test6",
-                        }),
-                        new Folder({
-                            name: "test7",
-                            path: "test7",
-                            children: [
-                                new Folder({
-                                    name: "test8",
-                                    path: "test8",
-                                    children: [
-                                        new Folder({
-                                            name: "test9",
-                                            path: "test9",
-                                            children: [],
-                                        }),
-                                    ]
-                                }),
-                            ],
-                        }),
-                    ],
-                })
-            ],
-        }),
-    ];
+    try {
+        const result = await invoke("get_environment_file_tree");
+        try {
+            return convertToFileTreeProp(result as string);
+        } catch {
+            throw new Error("Could not parse file tree json");
+        }
+    }
+    catch (error: any) {
+        throw new Error(`Failed to get file tree, cause: ${error}`);
+    }
 }

@@ -18,6 +18,9 @@ function isComponentVisible(component: MenuComponents) {
     return componentVisibility.value === component
 }
 
+const classes = 'selector_button';
+const show = true;
+
 </script>
 
 <template>
@@ -28,10 +31,10 @@ function isComponentVisible(component: MenuComponents) {
     </div>
 
     <div class="menu_selected">
-        <div v-if="isComponentVisible(MenuComponents.request_file)" class="menu_option">
+        <div v-show="isComponentVisible(MenuComponents.request_file)" class="menu_option">
             <request_file />
         </div>
-        <div v-if="isComponentVisible(MenuComponents.environment_variables_editor)" class="menu_option">
+        <div v-show="isComponentVisible(MenuComponents.environment_variables_editor)" class="menu_option">
             <environment_variables_editor />
         </div>
     </div>

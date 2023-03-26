@@ -10,44 +10,24 @@ const selected = pasteFrom[0];
 </script>
 
 <template>
-    <div class="url_editor_container">
-        <div class="paste_area">
-            <label for="pasteFrom" class="paste_label">from</label>
-            <select class="paste_select" name="pasteFrom">
-                <option class="paste_option" v-for="paste in pasteFrom">
-                    {{ paste }}
-                </option>
-            </select>
-        </div>
-        <input placeholder="Url here" class="url_input">
-        <button class="send_button">send</button>
+    <div class="paste_area">
+        <button class="paste_select" name="pasteFrom">
+            paste from
+        </button>
     </div>
+    <input placeholder="http://localhost:3000/test" class="url_input">
+    <button class="send_button">send</button>
 </template>
 
 <style scoped>
-.url_editor_container {
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    justify-content: space-between;
-    background-color: var(--color-background);
-    padding: 0.5rem;
-    height: 12%;
-    width: 100%;
-    border-bottom: 4px solid black;
-}
-
 .paste_area {
     display: flex;
     flex-direction: column;
     width: 15%;
-    height: 100%;
-}
-
-.paste_label {
-    color: white;
-    background-color: var(--color-primary);
-    text-align: center;
+    height: 70%;
+    border: 1px solid white;
+    border-radius: 0.5rem;
+    margin-right: 1%;
 }
 
 .paste_select {
@@ -55,29 +35,31 @@ const selected = pasteFrom[0];
     background-color: var(--color-primary);
     width: 100%;
     text-align: center;
-}
-
-.paste_option {
-    color: white;
-    background-color: var(--color-primary);
-    width: 100%;
+    border-radius: 0.5rem;
+    flex: auto;
 }
 
 .url_input {
     color: white;
+    padding-left: 2%;
     width: 90%;
-    height: 85%;
-    border: 3px solid white;
+    height: 70%;
+    border: 1px solid white;
     border-radius: 0.5rem;
+}
+
+.url_input:focus {
+    outline: none;
 }
 
 .send_button {
     color: white;
     background-color: var(--color-primary);
-    border: 3px solid white;
+    border: 1px solid white;
     border-radius: 0.5rem;
     margin-left: 0.5rem;
     width: 10%;
+    height: 70%;
     margin: 0.15rem;
     font-size: 0.9rem;
     font-weight: 500;

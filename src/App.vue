@@ -73,8 +73,9 @@ onMounted(() => {
   align-items: stretch;
   background-color: var(--color-background);
   width: 16dvw;
-  resize: horizontal;
+  min-width: 4dvw;
   height: 100%;
+  resize: horizontal;
   border: solid 2px black;
   flex: 1 1 auto;
 }
@@ -85,8 +86,9 @@ onMounted(() => {
   align-items: stretch;
   background-color: var(--color-background);
   width: 47dvw;
-  resize: horizontal;
+  min-width: 4dvw;
   height: 100%;
+  resize: horizontal;
   border: solid 2px black;
   flex: 1 1 auto;
 }
@@ -97,20 +99,10 @@ onMounted(() => {
   align-items: stretch;
   background-color: var(--color-background);
   width: 37dvw;
-  resize: horizontal;
+  min-width: 4dvw;
   height: 100%;
+  resize: horizontal;
   border: solid 2px black;
   flex: 1 1 auto;
-}
-
-.resizer {
-  width: 5px;
-  height: 100%;
-  background-color: #000;
-  cursor: col-resize;
-  user-select: none;
-  -webkit-user-select: none;
-  -moz-user-select: none;
-  -ms-user-select: none;
 }
 </style>
