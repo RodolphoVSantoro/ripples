@@ -9,6 +9,10 @@
 </template>
 
 <style scoped>
+/**
+    Tem convenções de nomenclatura pra CSS também, não é tão importante quanto as de JS mas ajuda a manter o código consistente
+    https://developer.mozilla.org/en-US/docs/Learn/CSS/Building_blocks/Organizing
+*/
 .url_editor_container {
     display: flex;
     flex-direction: row;

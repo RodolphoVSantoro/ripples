@@ -1,12 +1,20 @@
 <script setup lang="ts">
-import request_file from "@/components/request_files/index.vue"
-import environment_variables_editor from "@/components/environment_variables_editor/index.vue"
+// Convenção de nomenclatura: https://vuejs.org/style-guide/
+import RequestFile from "@/components/request_files/index.vue"
+import EnvironmentVariablesEditor from "@/components/environment_variables_editor/index.vue"
 import { ref } from "vue"
 
 enum MenuComponents {
     request_file,
     environment_variables_editor
 }
+/**
+ * Se usasse o <component is>, vc teria um objeto mais ou menos assim pra controlar:
+ * {
+ *   "request_file": RequestFile,
+ *   "environment_variables_editor": EnvironmentVariablesEditor
+ * }
+ */
 
 const componentVisibility = ref(MenuComponents.request_file)
 
@@ -28,6 +36,8 @@ function isComponentVisible(component: MenuComponents) {
     </div>
 
     <div class="menu_selected">
+        <!-- Aqui talvez caberia melhor um router: https://router.vuejs.org/ -->
+        <!-- Ou então vc poderia usar o <component is="nome_do_componente" /> -->
         <div v-if="isComponentVisible(MenuComponents.request_file)" class="menu_option">
             <request_file />
         </div>

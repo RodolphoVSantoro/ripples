@@ -41,6 +41,7 @@ function setVisibility(visibility: boolean) {
             </div>
             <div v-else>
                 <!--file icon--->
+                <!-- Guardar os icones em seus próprios arquivos, acho que você pode até importar eles diretamente como componentes, ou então usar em um <img> -->
                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
                     class="bi bi-file-earmark" viewBox="0 0 16 16">
                     <path
