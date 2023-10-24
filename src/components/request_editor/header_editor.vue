@@ -19,6 +19,7 @@
 
     <v-button v-on:click="addHeader">add header</v-button>
     
+    <!-- Quando usar o v-for, precisa especificar uma "key" pro Vue conseguir lidar com a reatividade no caso de mudanças -->
     <v-for v-for="(header, index) in headers">
 
         <v-text-field

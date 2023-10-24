@@ -30,6 +30,8 @@ function setActive(newActive: Active) {
         <v-btn @click="setActive(Active.headers)">headers</v-btn>
     </v-toolbar>
 
+    <!-- Mesmo que no environment_menu -->
+    <!-- Outra dica: não adicione muitos elementos, você poderia fazer o v-if no <body_editor> -->
     <div v-if="active === Active.body">
         <body_editor />
     </div>

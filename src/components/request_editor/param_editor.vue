@@ -4,6 +4,9 @@
         key: string,
         value: string
     }
+
+    // Isso também precisa ser reativo, então precisaria usar uma `ref` ou `reactive`
+    // https://vuejs.org/api/reactivity-core.html
     const params: Param[] = []
 
     function addParam() {

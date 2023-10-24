@@ -1,3 +1,7 @@
+/**
+    Não entendi muito bem o objetivo desse arquivo, mas no geral não é bom mexer no DOM diretamente assim quando se está usando Vue ou qualquer outro framework.
+ */
+
 function getChildrenElement(parent: HTMLElement, child: string): HTMLElement[] | null {
     const childrenElement = parent.getElementsByClassName(child);
     return childrenElement as unknown as HTMLElement[];

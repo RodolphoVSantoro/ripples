@@ -1,7 +1,10 @@
 <script setup lang="ts">
 
     const items = ['No auth', 'Basic', 'Bearer'];
-    let selected = 'No auth';
+
+    // Pra isso aqui funcionar, deveria ser uma `ref()`
+    // https://vuejs.org/api/reactivity-core.html
+    const selected = ref('No auth');
 
 </script>
 
