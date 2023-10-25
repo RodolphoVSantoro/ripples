@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { PropType, ref, watch } from "vue";
-import { FileTreeProp } from "@/scripts/files";
+import { FileTreeProp, File } from "@/scripts/files";
 
 const props = defineProps({
     fileTree: {
@@ -13,11 +13,6 @@ const props = defineProps({
 });
 
 const expanded = ref(false);
-
-function a() {
-    //TODO: implement open file
-    console.log('TODO: implement open file');
-}
 
 watch(() => props.fatherExpanded, (newValue, _oldValue) => {
     if (newValue === false) {
@@ -34,12 +29,12 @@ function setVisibility(visibility: boolean) {
 <template>
     <!--file-->
     <div v-if="fileTree === null || fileTree.isFile()" class="treeview">
-        <div class="list-group-item" @click="a()">
-            <div v-if="fileTree === null">
+        <div class="list-group-item">
+            <div class="empty-folder-item" v-if="fileTree === null">
                 <!--empty icon--->
                 <em class="empty-text">Empty</em>
             </div>
-            <div v-else>
+            <div v-else @click="$emit('open-file', fileTree?.path)">
                 <!--file icon--->
                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
                     class="bi bi-file-earmark" viewBox="0 0 16 16">
@@ -66,13 +61,14 @@ function setVisibility(visibility: boolean) {
             </svg>
             {{ fileTree.name, fileTree.path }}
         </div>
-
+        <!--folder children-->
         <div v-show="expanded">
             <div v-if="fileTree.children.length <= 0" class="list-group">
                 <file_tree v-bind:file-tree="null"></file_tree>
             </div>
             <div v-for="tree in fileTree.children" class="list-group">
-                <file_tree v-bind:file-tree="tree" v-bind:fatherExpanded="expanded" />
+                <file_tree @open-file="(filePath: string) => $emit('open-file', filePath)" v-bind:file-tree="tree"
+                    v-bind:fatherExpanded="expanded" />
             </div>
         </div>
     </div>
@@ -117,6 +113,10 @@ function setVisibility(visibility: boolean) {
 
 .treeview>.list-group-item:first-child {
     border-top-width: 0;
+}
+
+.empty-folder-item {
+    opacity: 0.1;
 }
 
 .empty-text {

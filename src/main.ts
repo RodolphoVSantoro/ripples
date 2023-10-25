@@ -1,6 +1,7 @@
 import { createApp } from "vue";
 import "./style.css";
 import App from "./App.vue";
+import JsonEditorVue from 'json-editor-vue';
 
 // Vuetify
 import 'vuetify/styles'
@@ -13,4 +14,7 @@ const vuetify = createVuetify({
   directives,
 })
 
-createApp(App).use(vuetify).mount('#app')
+const app = createApp(App)
+app.use(JsonEditorVue);
+app.use(vuetify);
+app.mount('#app');

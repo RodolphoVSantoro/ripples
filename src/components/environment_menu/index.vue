@@ -18,20 +18,23 @@ function isComponentVisible(component: MenuComponents) {
     return componentVisibility.value === component
 }
 
+const classes = 'selector_button';
+const show = true;
+
 </script>
 
 <template>
     <div class="menu_selector">
-        <v-btn class="selector_button" @click="setShownComponent(MenuComponents.request_file)">Requests</v-btn>
-        <v-btn class="selector_button"
-            @click="setShownComponent(MenuComponents.environment_variables_editor)">Variables</v-btn>
+        <button class="selector_button" @click="setShownComponent(MenuComponents.request_file)">Requests</button>
+        <button class="selector_button"
+            @click="setShownComponent(MenuComponents.environment_variables_editor)">Variables</button>
     </div>
 
     <div class="menu_selected">
-        <div v-if="isComponentVisible(MenuComponents.request_file)" class="menu_option">
-            <request_file />
+        <div v-show="isComponentVisible(MenuComponents.request_file)" class="menu_option">
+            <request_file @open-file="(filePath: string) => $emit('open-file', filePath)" />
         </div>
-        <div v-if="isComponentVisible(MenuComponents.environment_variables_editor)" class="menu_option">
+        <div v-show="isComponentVisible(MenuComponents.environment_variables_editor)" class="menu_option">
             <environment_variables_editor />
         </div>
     </div>
@@ -40,9 +43,24 @@ function isComponentVisible(component: MenuComponents) {
 .menu_selector {
     display: flex;
     flex-direction: row;
-    align-items: stretch;
+    justify-content: space-around;
+    background-color: white;
+    height: 5%;
     width: 100%;
 }
+
+.selector_button {
+    color: white;
+    background-color: var(--color-primary);
+    border-radius: 0.2rem;
+    width: inherit;
+    border-radius: 4px;
+    margin: 0.15rem;
+    font-size: 0.9rem;
+    font-weight: 500;
+    text-transform: uppercase;
+}
+
 
 .menu_selected {
     display: flex;
@@ -56,16 +74,5 @@ function isComponentVisible(component: MenuComponents) {
     position: relative;
     width: 100%;
     height: 100%;
-}
-
-.selector_button {
-    flex: 1;
-}
-
-.v-btn--size-default {
-    --v-btn-size: 0.875rem;
-    --v-btn-height: 36px;
-    font-size: 0.875rem;
-    padding: 0 16px;
 }
 </style>

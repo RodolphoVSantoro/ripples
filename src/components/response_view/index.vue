@@ -12,16 +12,19 @@ enum Active {
     request
 }
 const active = ref(Active.body);
+function setActive(newActive: Active) {
+    active.value = newActive;
+}
 </script>
 
 <template>
     <response_url />
 
-    <v-toolbar>
-        <v-btn class="selector_button" @click="active = Active.body">body</v-btn>
-        <v-btn class="selector_button" @click="active = Active.headers">headers</v-btn>
-        <v-btn class="selector_button" @click="active = Active.request">request</v-btn>
-    </v-toolbar>
+    <div class="response_view_selector">
+        <button class="response_view_selector_option" @click="setActive(Active.body)">body</button>
+        <button class="response_view_selector_option" @click="setActive(Active.headers)">headers</button>
+        <button class="response_view_selector_option" @click="setActive(Active.request)">request</button>
+    </div>
 
     <div v-if="active === Active.body">
         <response_body />
@@ -35,3 +38,26 @@ const active = ref(Active.body);
         <response_request />
     </div>
 </template>
+
+<style scoped>
+.response_view_selector {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+    background-color: white;
+    height: 5%;
+    width: 100%;
+}
+
+.response_view_selector_option {
+    color: white;
+    background-color: var(--color-primary);
+    border-radius: 0.2rem;
+    width: inherit;
+    border-radius: 4px;
+    margin: 0.15rem;
+    font-size: 0.9rem;
+    font-weight: 500;
+    text-transform: uppercase;
+}
+</style>
