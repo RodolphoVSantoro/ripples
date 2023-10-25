@@ -19,7 +19,7 @@ watch(() => props.currentBody, (newBody) => {
     if (newBody === undefined) {
         jsonBody.value = undefined;
     }
-});
+}, { immediate: true });
 
 enum BodyTypes {
     NO_BODY,

@@ -24,7 +24,7 @@ watch(() => props.currentRequest, (newRequest) => {
     if (newRequest !== null) {
         request.value = newRequest;
     }
-});
+}, { immediate: true });
 
 enum Active {
     body,
