@@ -9,9 +9,9 @@ use std::env;
 use std::sync::{Arc, Mutex};
 use tauri::State;
 
-fn get_current_dir_string_lossy() -> Result<String, String> {
+fn get_current_dir_string_lossy(path_str: &str) -> Result<String, String> {
     match env::current_dir() {
-        Ok(path) => Ok(path.to_string_lossy().to_string()),
+        Ok(path) => Ok(path.join(path_str).to_string_lossy().to_string()),
         Err(e) => Err(e.to_string()),
     }
 }
@@ -41,8 +41,7 @@ fn get_file_contents(
 }
 
 fn main() {
-    let current_path = get_current_dir_string_lossy().unwrap();
-    let path = current_path + "\\default-workspace";
+    let path = get_current_dir_string_lossy("default-workspace").unwrap();
     let jwp = JSONWorksPace::new(Some(&path));
     let jwp_mutex = Arc::new(Mutex::new(jwp));
     tauri::Builder::default()
