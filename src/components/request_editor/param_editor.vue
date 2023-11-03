@@ -1,13 +1,15 @@
 <script setup lang="ts">
+import { ref } from 'vue';
+
 
     type Param = {
         key: string,
         value: string
     }
-    const params: Param[] = []
+    const params = ref([] as Param[]);
 
     function addParam() {
-        params.push({
+        params.value.push({
             key: '',
             value: ''
         })
@@ -19,7 +21,7 @@
 
     <v-button v-on:click="addParam">add param</v-button>
     
-    <v-for v-for="(param, index) in params">
+    <v-for v-for="(param) in params" :key="param">
 
         <v-text-field
             label="key"

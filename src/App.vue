@@ -1,8 +1,8 @@
 <script setup lang="ts">
-import request_editor from "@/components/request_editor/index.vue";
-import response_view from "@/components/response_view/index.vue";
-import environment_menu from "@/components/environment_menu/index.vue";
-import environment_selector from "@/components/environment_selector/index.vue";
+import RequestEditor from "@/components/request_editor/index.vue";
+import ResponseView from "@/components/response_view/index.vue";
+import EnvironmentMenu from "@/components/environment_menu/index.vue";
+import EnvironmentSelector from "@/components/environment_selector/index.vue";
 
 import { getContents, StringRequest } from "@/scripts/files";
 import { onMounted, Ref, ref } from "vue";
@@ -37,21 +37,21 @@ function changeFile(contents: string) {
   <div class="app_container">
 
     <div class="top_bar_container">
-      <environment_selector />
+      <environment-selector />
     </div>
     <div class="middle_container" id="middle_container">
 
       <div class="environment_menu_container horizontal_resize">
-        <environment_menu
+        <environment-menu
           @open-file="(filePath: string) => getContents(filePath).then((contents) => changeFile(contents))" />
       </div>
       <div class="resizer"></div>
       <div class="request_container horizontal_resize">
-        <request_editor v-bind:current-request="currentRequest" />
+        <request-editor v-bind:current-request="currentRequest" />
       </div>
       <div class="resizer"></div>
       <div class="response_container horizontal_resize">
-        <response_view />
+        <response-view />
       </div>
 
     </div>

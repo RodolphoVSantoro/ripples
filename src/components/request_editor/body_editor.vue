@@ -28,7 +28,7 @@ enum BodyTypes {
     TEXT
 }
 
-let active = ref(BodyTypes.NO_BODY);
+const active = ref(BodyTypes.NO_BODY);
 function setActive(newActive: BodyTypes) {
     active.value = newActive;
 }
@@ -44,10 +44,11 @@ function setActive(newActive: BodyTypes) {
             <button class="body_edition_selector_option" @click="setActive(BodyTypes.TEXT)">text</button>
         </div>
         <div class="body_fields">
-            <div v-show="active === BodyTypes.NO_BODY">
-                <div class="no_body_message">
-                    No body
-                </div>
+            <div 
+                v-show="active === BodyTypes.NO_BODY" 
+                class="no_body_message"
+            >
+                No body
             </div>
             <div class="body_editor" v-show="active === BodyTypes.JSON">
                 <JsonEditorVue class="body_json_editor" v-model="jsonBody" />

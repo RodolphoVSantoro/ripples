@@ -13,10 +13,16 @@ onBeforeMount(async () => {
 
 <template>
   <v-list class="files_list">
-    <div v-for="tree in fileTree">
-      <file_tree @open-file="(filePath: string) => $emit('open-file', filePath)" v-bind:file-tree="tree"
-        class="file_tree" />
-    </div>
+    <v-for 
+      v-for="tree in fileTree"
+      :key="tree"
+    >
+      <file_tree 
+        @open-file="(filePath: string) => $emit('open-file', filePath)"
+        v-bind:file-tree="tree"
+        class="file_tree"
+      />
+    </v-for>
   </v-list>
 </template>
 
