@@ -1,6 +1,6 @@
 import { createApp } from "vue";
-import "./style.css";
-import App from "./App.vue";
+import "@/style.css";
+import App from "@/App.vue";
 import JsonEditorVue from 'json-editor-vue';
 
 // Vuetify
