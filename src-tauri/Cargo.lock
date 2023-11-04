@@ -2840,6 +2840,7 @@ name = "simple-requests"
 version = "0.0.0"
 dependencies = [
  "json_workspace",
+ "reqwest",
  "serde",
  "serde_json",
  "tauri",

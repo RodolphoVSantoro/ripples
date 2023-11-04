@@ -46,7 +46,7 @@ interface JSONRustFileTree {
 
 export interface StringRequest {
     url: string | null,
-    method: string | null,
+    method: 'GET' | 'POST' | 'PUT' | 'DELETE' | 'PATCH' | 'HEAD' | 'OPTIONS' | 'CONNECT' | 'TRACE',
     body: string | undefined,
     headers: Record<string, string>,
 }

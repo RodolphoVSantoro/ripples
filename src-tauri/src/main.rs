@@ -40,6 +40,12 @@ fn get_file_contents(
     }
 }
 
+#[tauri::command]
+async fn send_request(url: String) -> Result<String, String> {
+    let resp = reqwest::get(&url).await.unwrap().text().await.unwrap();
+    Ok(resp)
+}
+
 fn main() {
     let path = get_current_dir_string_lossy("default-workspace").unwrap();
     let jwp = JSONWorksPace::new(Some(&path));
@@ -48,7 +54,8 @@ fn main() {
         .manage(jwp_mutex)
         .invoke_handler(tauri::generate_handler![
             get_environment_file_tree,
-            get_file_contents
+            get_file_contents,
+            send_request,
         ])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");

@@ -11,11 +11,19 @@ const props = defineProps({
 
 const url: Ref<string | null> = ref(null);
 
+const emit = defineEmits(["send"]);
+
 watch(() => props.currentUrl, (newUrl) => {
     if (newUrl) {
         url.value = newUrl;
     }
 });
+
+function emitSend() {
+    if (url.value) {
+        emit("send", url.value);
+    }
+}
 
 const pasteFrom = [
     "url",
@@ -23,8 +31,9 @@ const pasteFrom = [
     "file",
     "graphql",
     "soap",
-];
-const selected = pasteFrom[0];
+] as const;
+type PasteFrom = typeof pasteFrom[number];
+const selected = ref(pasteFrom[0] as PasteFrom);
 </script>
 
 <template>
@@ -34,7 +43,12 @@ const selected = pasteFrom[0];
         </button>
     </div>
     <input placeholder="http://localhost:3000/test" class="url_input" v-model="url">
-    <button class="send_button">send</button>
+    <button 
+        class="send_button"
+        @click="emitSend"
+    >
+        send
+    </button>
 </template>
 
 <style scoped>

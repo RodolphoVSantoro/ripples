@@ -1,10 +1,10 @@
 <script setup lang="ts">
 
 import { ref } from "vue";
-import response_url from "@/components/response_view/url.vue";
-import response_body from "@/components/response_view/preview.vue";
-import response_headers from "@/components/response_view/header.vue";
-import response_request from "@/components/response_view/request.vue";
+import ResponseUrl from "@/components/response_view/url.vue";
+import ResponseBody from "@/components/response_view/body.vue";
+import ResponseHeaders from "@/components/response_view/header.vue";
+import ResponseRequest from "@/components/response_view/request.vue";
 
 enum Active {
     body,
@@ -15,10 +15,18 @@ const active = ref(Active.body);
 function setActive(newActive: Active) {
     active.value = newActive;
 }
+
+const props = defineProps({
+    response: {
+        type: String,
+        default: undefined,
+    },
+});
+
 </script>
 
 <template>
-    <response_url />
+    <response-url />
 
     <div class="response_view_selector">
         <button class="response_view_selector_option" @click="setActive(Active.body)">body</button>
@@ -27,15 +35,17 @@ function setActive(newActive: Active) {
     </div>
 
     <div v-if="active === Active.body">
-        <response_body />
+        <response-body
+            v-bind:response="props.response"
+        />
     </div>
 
     <div v-if="active === Active.headers">
-        <response_headers />
+        <response-headers />
     </div>
 
     <div v-if="active === Active.request">
-        <response_request />
+        <response-request />
     </div>
 </template>
 
