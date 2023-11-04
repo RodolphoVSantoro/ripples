@@ -1,7 +1,10 @@
 <script setup lang="ts">
+import { ref } from 'vue';
 
-    const items = ['No auth', 'Basic', 'Bearer'];
-    let selected = 'No auth';
+
+    const items = ['No auth', 'Basic', 'Bearer'] as const;
+    type AuthType = typeof items[number];
+    const selected = ref('No auth' as AuthType);
 
 </script>
 

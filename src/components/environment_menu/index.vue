@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import request_file from "@/components/request_files/index.vue"
-import environment_variables_editor from "@/components/environment_variables_editor/index.vue"
+import RequestFile from "@/components/request_files/index.vue"
+import EnvironmentVariablesEditor from "@/components/environment_variables_editor/index.vue"
 import { ref } from "vue"
 
 enum MenuComponents {
@@ -32,10 +32,10 @@ const show = true;
 
     <div class="menu_selected">
         <div v-show="isComponentVisible(MenuComponents.request_file)" class="menu_option">
-            <request_file @open-file="(filePath: string) => $emit('open-file', filePath)" />
+            <request-file @open-file="(filePath: string) => $emit('open-file', filePath)" />
         </div>
         <div v-show="isComponentVisible(MenuComponents.environment_variables_editor)" class="menu_option">
-            <environment_variables_editor />
+            <environment-variables-editor />
         </div>
     </div>
 </template>

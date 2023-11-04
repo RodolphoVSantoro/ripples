@@ -1,8 +1,8 @@
 <script setup lang="ts">
 
-import url_editor from "@/components/request_editor/url_editor.vue";
-import body_editor from "@/components/request_editor/body_editor.vue";
-import headers_editor from "@/components/request_editor/header_editor.vue";
+import UrlEditor from "@/components/request_editor/url_editor.vue";
+import BodyEditor from "@/components/request_editor/body_editor.vue";
+import HeadersEditor from "@/components/request_editor/header_editor.vue";
 import { PropType, Ref, ref, watch } from "vue";
 import { StringRequest } from "@/scripts/files";
 
@@ -32,7 +32,7 @@ enum Active {
     params,
     auth
 }
-let active = ref(Active.body);
+const active = ref(Active.body);
 function setActive(newActive: Active) {
     active.value = newActive;
 }
@@ -42,7 +42,7 @@ function setActive(newActive: Active) {
 
 <template>
     <div class="url_editor_container">
-        <url_editor v-bind:current-url="request?.url ?? ''" />
+        <url-editor v-bind:current-url="request?.url ?? ''" />
     </div>
 
     <div>
@@ -56,11 +56,11 @@ function setActive(newActive: Active) {
 
     <div class="request_editor_container">
         <div v-if="active === Active.body" class="body_editor">
-            <body_editor v-bind:current-body="request?.body" />
+            <body-editor v-bind:current-body="request?.body" />
         </div>
 
         <div v-else-if="active === Active.headers" class="body_editor">
-            <headers_editor v-bind:headers="request?.headers" />
+            <headers-editor v-bind:headers="request?.headers" />
         </div>
     </div>
 </template>

@@ -19,7 +19,7 @@
 
     <v-button v-on:click="addHeader">add header</v-button>
     
-    <v-for v-for="(header, index) in headers">
+    <v-for v-for="(header) in headers" :key="header">
 
         <v-text-field
             label="key"
