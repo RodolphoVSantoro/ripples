@@ -1,13 +1,12 @@
 <script setup lang="ts">
 import { PropType, Ref, ref, watch } from "vue";
 
-import { invoke } from "@tauri-apps/api"
-
 import { StringRequest } from "@/scripts/files";
 
 import UrlEditor from "@/components/request_editor/url_editor.vue";
 import BodyEditor from "@/components/request_editor/body_editor.vue";
 import HeadersEditor from "@/components/request_editor/header_editor.vue";
+import { rustRequest } from "@/scripts/requests";
 
 
 const props = defineProps({
@@ -20,22 +19,14 @@ const props = defineProps({
 const request: Ref<StringRequest> = ref({
     method: 'GET',
     url: null,
-    headers: {},
+    headers: null,
     body: undefined,
 });
 
 const emit = defineEmits(['response']);
 
 async function send() {
-    const { method, body, url } = request.value;
-    if(!url) {
-        return;
-    }
-    
-    let headers = request.value.headers ?? {};
-    
-    const response = await invoke('send_request', { url });
-
+    const response = await rustRequest(request.value);
     emit('response', response);
 }
 
@@ -60,10 +51,7 @@ function setActive(newActive: Active) {
 
 <template>
     <div class="url_editor_container">
-        <url-editor 
-            v-bind:current-url="request?.url ?? ''"
-            v-on:send="send"
-        />
+        <url-editor v-bind:current-url="request?.url ?? ''" v-on:send="send" />
     </div>
 
     <div>

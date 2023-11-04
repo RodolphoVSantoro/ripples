@@ -1,6 +1,9 @@
 <script setup lang="ts">
 
-import { ref } from "vue";
+import { PropType, ref } from "vue";
+
+import { RustResponse } from "@/scripts/requests";
+
 import ResponseUrl from "@/components/response_view/url.vue";
 import ResponseBody from "@/components/response_view/body.vue";
 import ResponseHeaders from "@/components/response_view/header.vue";
@@ -18,7 +21,7 @@ function setActive(newActive: Active) {
 
 const props = defineProps({
     response: {
-        type: String,
+        type: Object as PropType<RustResponse | undefined>,
         default: undefined,
     },
 });
@@ -26,7 +29,7 @@ const props = defineProps({
 </script>
 
 <template>
-    <response-url />
+    <response-url v-bind:response="props.response" />
 
     <div class="response_view_selector">
         <button class="response_view_selector_option" @click="setActive(Active.body)">body</button>
@@ -35,17 +38,15 @@ const props = defineProps({
     </div>
 
     <div v-if="active === Active.body">
-        <response-body
-            v-bind:response="props.response"
-        />
+        <response-body v-bind:response="props.response" />
     </div>
 
     <div v-if="active === Active.headers">
-        <response-headers />
+        <response-headers v-bind:response="props.response" />
     </div>
 
     <div v-if="active === Active.request">
-        <response-request />
+        <response-request v-bind:response="props.response" />
     </div>
 </template>
 

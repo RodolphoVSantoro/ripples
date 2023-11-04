@@ -48,7 +48,7 @@ export interface StringRequest {
     url: string | null,
     method: 'GET' | 'POST' | 'PUT' | 'DELETE' | 'PATCH' | 'HEAD' | 'OPTIONS' | 'CONNECT' | 'TRACE',
     body: string | undefined,
-    headers: Record<string, string>,
+    headers: Record<string, string> | null,
 }
 
 export type JsonBody = boolean | number | string | null | { [key: string]: JsonBody } | Array<JsonBody>;

@@ -1,41 +1,44 @@
 <script setup lang="ts">
+
+import { onMounted, Ref, ref } from "vue";
+
+import { getContents, StringRequest } from "@/scripts/files";
+import { RustResponse } from "@/scripts/requests";
+import { resizerFromDiv } from "@/scripts/elementResizer";
+
 import RequestEditor from "@/components/request_editor/index.vue";
 import ResponseView from "@/components/response_view/index.vue";
 import EnvironmentMenu from "@/components/environment_menu/index.vue";
 import EnvironmentSelector from "@/components/environment_selector/index.vue";
 
-import { getContents, StringRequest } from "@/scripts/files";
-import { onMounted, Ref, ref } from "vue";
-import { resizerFromDiv } from "@/scripts/elementResizer";
-
 onMounted(() => {
-    const resizerDiv = document.getElementById("middle_container");
-    if (!resizerDiv) {
-        throw new Error("Could not find element with id 'middle_container'");
-    }
-    window.addEventListener("load", () => resizerFromDiv(resizerDiv));
+	const resizerDiv = document.getElementById("middle_container");
+	if (!resizerDiv) {
+		throw new Error("Could not find element with id 'middle_container'");
+	}
+	window.addEventListener("load", () => resizerFromDiv(resizerDiv));
 })
 
 const currentRequest: Ref<StringRequest> = ref({
-    url: null,
-    method: 'GET',
-    headers: {},
-    body: undefined,
+	url: null,
+	method: 'GET',
+	headers: {},
+	body: undefined,
 });
 
-const displayedResponse: Ref<string | undefined> = ref(undefined);
+const displayedResponse: Ref<RustResponse | undefined> = ref(undefined);
 
-function displayResponse(response: string) {
-    displayedResponse.value = response;
+function displayResponse(response: RustResponse) {
+	displayedResponse.value = response;
 }
 
 function changeFile(contents: string) {
-    try {
-        const jsonRequest: StringRequest = JSON.parse(contents);
-        currentRequest.value = jsonRequest;
-    } catch (error) {
-        console.error(`Failed to parse file contents as String Request, cause: ${error}`);
-    }
+	try {
+		const jsonRequest: StringRequest = JSON.parse(contents);
+		currentRequest.value = jsonRequest;
+	} catch (error) {
+		console.error(`Failed to parse file contents as String Request, cause: ${error}`);
+	}
 }
 </script>
 
@@ -49,27 +52,21 @@ function changeFile(contents: string) {
 
 			<div class="environment_menu_container horizontal_resize">
 				<environment-menu
-					@open-file="(filePath: string) => getContents(filePath).then((contents) => changeFile(contents))" 
-				/>
+					@open-file="(filePath: string) => getContents(filePath).then((contents) => changeFile(contents))" />
 			</div>
-		
+
 			<div class="resizer"></div>
-			
+
 			<div class="request_container horizontal_resize">
-				<request-editor 
-					v-bind:current-request="currentRequest"
-					v-on:response="displayResponse"
-				/>
+				<request-editor v-bind:current-request="currentRequest" v-on:response="displayResponse" />
 			</div>
 
 			<div class="resizer"></div>
 
 			<div class="response_container horizontal_resize">
-				<response-view 
-					v-bind:response="displayedResponse"
-				/>
+				<response-view v-bind:response="displayedResponse" />
 			</div>
-		
+
 		</div>
 
 	</div>
