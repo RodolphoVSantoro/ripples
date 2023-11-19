@@ -4,8 +4,12 @@
 )]
 
 use json_workspace::JSONWorksPace;
+use reqwest::header::{HeaderMap, HeaderName, HeaderValue};
+use serde::Serialize;
 use serde_json::json;
+use std::collections::HashMap;
 use std::env;
+use std::str::FromStr;
 use std::sync::{Arc, Mutex};
 use tauri::State;
 
@@ -40,6 +44,80 @@ fn get_file_contents(
     }
 }
 
+#[derive(Serialize)]
+struct ResponseType {
+    status: u16,
+    headers: HashMap<String, Vec<String>>,
+    body: String,
+    url: String,
+}
+
+fn convert_map(headers: &HeaderMap<HeaderValue>) -> HashMap<String, Vec<String>> {
+    let mut header_hashmap = HashMap::new();
+    for (k, v) in headers {
+        let k = k.as_str().to_owned();
+        let v = String::from_utf8_lossy(v.as_bytes()).into_owned();
+        header_hashmap.entry(k).or_insert_with(Vec::new).push(v)
+    }
+    header_hashmap
+}
+
+#[tauri::command]
+async fn send_request(
+    url: String,
+    method: String,
+    headers: Option<HashMap<String, Vec<String>>>,
+    body: Option<String>,
+) -> Result<ResponseType, String> {
+    let header_map = match headers {
+        Some(headers) => {
+            let mut header_map = HeaderMap::new();
+            for (key, values) in headers.into_iter() {
+                for value in values {
+                    header_map.append(
+                        HeaderName::from_str(key.as_str()).unwrap(),
+                        value.parse().unwrap(),
+                    );
+                }
+            }
+            header_map
+        }
+        None => HeaderMap::new(),
+    };
+
+    let client = reqwest::Client::new();
+    let client = match method.as_str() {
+        "GET" => client.get(url),
+        "POST" => client.post(url),
+        "PUT" => client.put(url),
+        "PATCH" => client.patch(url),
+        "DELETE" => client.delete(url),
+        method => return Err(format!("Method {:?}not supported", method).to_string()),
+    };
+    let client = match body {
+        Some(body) => client.body(body),
+        None => client,
+    };
+
+    let response = client.headers(header_map).send().await;
+    let response = match response {
+        Ok(response) => response,
+        Err(e) => return Err(e.to_string()),
+    };
+
+    let status = response.status().as_u16();
+    let headers = convert_map(response.headers());
+    let url = response.url().to_string();
+    let body = response.text().await.unwrap();
+
+    Ok(ResponseType {
+        status,
+        headers,
+        url,
+        body,
+    })
+}
+
 fn main() {
     let path = get_current_dir_string_lossy("default-workspace").unwrap();
     let jwp = JSONWorksPace::new(Some(&path));
@@ -48,7 +126,8 @@ fn main() {
         .manage(jwp_mutex)
         .invoke_handler(tauri::generate_handler![
             get_environment_file_tree,
-            get_file_contents
+            get_file_contents,
+            send_request,
         ])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");

@@ -1,6 +1,9 @@
 <script setup lang="ts">
+
 import { PropType, Ref, ref, watch } from 'vue';
+
 import JsonEditorVue from 'json-editor-vue';
+
 import { JsonBody } from '@/scripts/files';
 
 const props = defineProps({
@@ -44,10 +47,7 @@ function setActive(newActive: BodyTypes) {
             <button class="body_edition_selector_option" @click="setActive(BodyTypes.TEXT)">text</button>
         </div>
         <div class="body_fields">
-            <div 
-                v-show="active === BodyTypes.NO_BODY" 
-                class="no_body_message"
-            >
+            <div v-show="active === BodyTypes.NO_BODY" class="no_body_message">
                 No body
             </div>
             <div class="body_editor" v-show="active === BodyTypes.JSON">

@@ -4,12 +4,14 @@ import { PropType, Ref, ref, watch } from "vue";
 
 const props = defineProps({
     currentUrl: {
-        type: Object as PropType<string | null>,
+        type: String as PropType<string | null>,
         default: null,
     },
 });
 
 const url: Ref<string | null> = ref(null);
+
+const emit = defineEmits(["send"]);
 
 watch(() => props.currentUrl, (newUrl) => {
     if (newUrl) {
@@ -17,14 +19,21 @@ watch(() => props.currentUrl, (newUrl) => {
     }
 });
 
+function emitSend() {
+    if (url.value) {
+        emit("send", url.value);
+    }
+}
+
 const pasteFrom = [
     "url",
     "curl",
     "file",
     "graphql",
     "soap",
-];
-const selected = pasteFrom[0];
+] as const;
+type PasteFrom = typeof pasteFrom[number];
+const selected = ref(pasteFrom[0] as PasteFrom);
 </script>
 
 <template>
@@ -34,7 +43,9 @@ const selected = pasteFrom[0];
         </button>
     </div>
     <input placeholder="http://localhost:3000/test" class="url_input" v-model="url">
-    <button class="send_button">send</button>
+    <button class="send_button" @click="emitSend">
+        send
+    </button>
 </template>
 
 <style scoped>
