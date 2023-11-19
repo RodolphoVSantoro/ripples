@@ -15,8 +15,8 @@ const props = defineProps({
 </script>
 
 <template>
-    <v-for v-for="(key, index) in Object.keys(props.response?.headers ?? {})" :key="key">
+    <div v-for="(key) in Object.keys(props.response?.headers ?? {})" :key="key">
         {{ key }}: {{ props.response?.headers[key] }}
         <br>
-    </v-for>
+    </div>
 </template>

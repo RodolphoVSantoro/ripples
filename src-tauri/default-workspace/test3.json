@@ -2,9 +2,15 @@
     "url": "http://localhost:3000/sources/123",
     "method": "POST",
     "headers": {
-        "Content-Type": "application/json",
-        "x-user-id": "123",
-        "x-community": "test"
+        "Content-Type": [
+            "application/json"
+        ],
+        "x-user-id": [
+            "123"
+        ],
+        "x-community": [
+            "test"
+        ]
     },
     "body": "{ \"name\": \"test\", \"email\": \"test@test.com\" }"
 }

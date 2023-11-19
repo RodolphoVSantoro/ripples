@@ -2,8 +2,8 @@
 
 import { ref } from "vue"
 
-import RequestFile from "@/components/request_files/index.vue"
-import EnvironmentVariablesEditor from "@/components/environment_variables_editor/index.vue"
+import RequestFile from "@/components/RequestFiles/index.vue"
+import EnvironmentVariablesEditor from "@/components/EnvironmentVariablesEditor/index.vue"
 
 enum MenuComponents {
     request_file,
@@ -20,6 +20,8 @@ function isComponentVisible(component: MenuComponents) {
     return componentVisibility.value === component
 }
 
+const emit = defineEmits(['open-file']);
+
 const classes = 'selector_button';
 const show = true;
 
@@ -34,7 +36,7 @@ const show = true;
 
     <div class="menu_selected">
         <div v-show="isComponentVisible(MenuComponents.request_file)" class="menu_option">
-            <request-file @open-file="(filePath: string) => $emit('open-file', filePath)" />
+            <request-file @open-file="(filePath: string) => emit('open-file', filePath)" />
         </div>
         <div v-show="isComponentVisible(MenuComponents.environment_variables_editor)" class="menu_option">
             <environment-variables-editor />

@@ -4,10 +4,10 @@ import { PropType, ref } from "vue";
 
 import { RustResponse } from "@/scripts/requests";
 
-import ResponseUrl from "@/components/response_view/url.vue";
-import ResponseBody from "@/components/response_view/body.vue";
-import ResponseHeaders from "@/components/response_view/header.vue";
-import ResponseRequest from "@/components/response_view/request.vue";
+import ResponseUrl from "@/components/ResponseView/url.vue";
+import ResponseBody from "@/components/ResponseView/body.vue";
+import ResponseHeaders from "@/components/ResponseView/header.vue";
+import ResponseRequest from "@/components/ResponseView/request.vue";
 
 enum Active {
     body,

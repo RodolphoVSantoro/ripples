@@ -2,11 +2,11 @@
 import { PropType, Ref, ref, watch } from "vue";
 
 import { StringRequest } from "@/scripts/files";
-
-import UrlEditor from "@/components/request_editor/url_editor.vue";
-import BodyEditor from "@/components/request_editor/body_editor.vue";
-import HeadersEditor from "@/components/request_editor/header_editor.vue";
 import { rustRequest } from "@/scripts/requests";
+
+import UrlEditor from "@/components/RequestEditor/UrlEditor.vue";
+import BodyEditor from "@/components/RequestEditor/BodyEditor.vue";
+import HeadersEditor from "@/components/RequestEditor/HeaderEditor.vue";
 
 
 const props = defineProps({
@@ -47,6 +47,17 @@ function setActive(newActive: Active) {
     active.value = newActive;
 }
 
+function addHeader(key: string, value: string) {
+    if (!request.value.headers) {
+        request.value.headers = {};
+    }
+    if (!request.value.headers?.[key]) {
+        request.value.headers[key] = [value];
+    } else {
+        request.value.headers[key].push(value);
+    }
+}
+
 </script>
 
 <template>
@@ -69,7 +80,7 @@ function setActive(newActive: Active) {
         </div>
 
         <div v-else-if="active === Active.headers" class="body_editor">
-            <headers-editor v-bind:headers="request?.headers" />
+            <headers-editor v-bind:headers="request?.headers" v-on:add-header="addHeader('', '')" />
         </div>
     </div>
 </template>

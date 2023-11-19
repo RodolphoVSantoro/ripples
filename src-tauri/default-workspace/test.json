@@ -2,7 +2,9 @@
     "url": "test.com",
     "method": "POST",
     "headers": {
-        "Content-Type": "application/json"
+        "Content-Type": [
+            "application/json"
+        ]
     },
     "body": "{ \"name\": \"test\", \"email\": \"test@test.com\" }"
 }

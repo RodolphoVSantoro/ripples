@@ -9,7 +9,7 @@ pub struct StringRequest {
     url: String,
     method: String,
     body: String,
-    headers: HashMap<String, String>,
+    headers: HashMap<String, Vec<String>>,
 }
 
 #[derive(Serialize, Debug, Clone)]
@@ -71,9 +71,9 @@ pub fn parse_curl(input: &str) -> Result<StringRequest, Box<dyn Error>> {
 
 /// # Errors
 ///
-/// Will return `Err` if it fails to convert the header content to a HasMap<string, string>.
-fn get_headers(parsed: &ParsedRequest) -> Result<HashMap<String, String>, Box<dyn Error>> {
-    let mut headers: HashMap<String, String> = HashMap::new();
+/// Will return `Err` if it fails to convert the header content to a HasMap<string, Vec<string>>.
+fn get_headers(parsed: &ParsedRequest) -> Result<HashMap<String, Vec<String>>, Box<dyn Error>> {
+    let mut headers: HashMap<String, Vec<String>> = HashMap::new();
     let header_results = parsed.headers.iter().map(|header| {
         let header_name = header.0.to_string();
         let header_content_slice = header.1.to_str();
@@ -81,7 +81,11 @@ fn get_headers(parsed: &ParsedRequest) -> Result<HashMap<String, String>, Box<dy
             Ok(content) => String::from(content),
             Err(e) => return Err(Box::new(e)),
         };
-        headers.insert(header_name, header_content);
+        match headers.get(&header_name) {
+            Some(header) => headers.insert(header_name.clone(), header.clone()),
+            None => headers.insert(header_name.clone(), vec![]),
+        };
+        headers.insert(header_name, vec![header_content]);
         return Ok(());
     });
     for header_result in header_results {

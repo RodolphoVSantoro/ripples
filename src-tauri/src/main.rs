@@ -4,11 +4,12 @@
 )]
 
 use json_workspace::JSONWorksPace;
-use reqwest::header::{HeaderMap, HeaderValue};
+use reqwest::header::{HeaderMap, HeaderName, HeaderValue};
 use serde::Serialize;
 use serde_json::json;
 use std::collections::HashMap;
 use std::env;
+use std::str::FromStr;
 use std::sync::{Arc, Mutex};
 use tauri::State;
 
@@ -65,39 +66,40 @@ fn convert_map(headers: &HeaderMap<HeaderValue>) -> HashMap<String, Vec<String>>
 async fn send_request(
     url: String,
     method: String,
-    headers: Option<HashMap<String, String>>,
+    headers: Option<HashMap<String, Vec<String>>>,
     body: Option<String>,
 ) -> Result<ResponseType, String> {
-    let headers = match headers {
-        Some(headers) => (&headers).try_into().unwrap(),
+    let header_map = match headers {
+        Some(headers) => {
+            let mut header_map = HeaderMap::new();
+            for (key, values) in headers.into_iter() {
+                for value in values {
+                    header_map.append(
+                        HeaderName::from_str(key.as_str()).unwrap(),
+                        value.parse().unwrap(),
+                    );
+                }
+            }
+            header_map
+        }
         None => HeaderMap::new(),
     };
 
     let client = reqwest::Client::new();
-    let response = match method.as_str() {
-        "GET" => match body {
-            Some(body) => client.get(url).headers(headers).body(body).send().await,
-            None => client.get(url).headers(headers).send().await,
-        },
-        "POST" => match body {
-            Some(body) => client.post(url).headers(headers).body(body).send().await,
-            None => client.post(url).headers(headers).send().await,
-        },
-        "PUT" => match body {
-            Some(body) => client.put(url).headers(headers).body(body).send().await,
-            None => client.post(url).headers(headers).send().await,
-        },
-        "PATCH" => match body {
-            Some(body) => client.patch(url).headers(headers).body(body).send().await,
-            None => client.post(url).headers(headers).send().await,
-        },
-        "DELETE" => match body {
-            Some(body) => client.delete(url).headers(headers).body(body).send().await,
-            None => client.post(url).headers(headers).send().await,
-        },
+    let client = match method.as_str() {
+        "GET" => client.get(url),
+        "POST" => client.post(url),
+        "PUT" => client.put(url),
+        "PATCH" => client.patch(url),
+        "DELETE" => client.delete(url),
         method => return Err(format!("Method {:?}not supported", method).to_string()),
     };
+    let client = match body {
+        Some(body) => client.body(body),
+        None => client,
+    };
 
+    let response = client.headers(header_map).send().await;
     let response = match response {
         Ok(response) => response,
         Err(e) => return Err(e.to_string()),

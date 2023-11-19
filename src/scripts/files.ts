@@ -1,4 +1,5 @@
 import { invoke } from "@tauri-apps/api";
+
 export type FileTree = Folder | File;
 
 export function convertToFileTreeProp(file_tree_string: string): FileTree[] {
@@ -48,7 +49,7 @@ export interface StringRequest {
     url: string | null,
     method: 'GET' | 'POST' | 'PUT' | 'DELETE' | 'PATCH' | 'HEAD' | 'OPTIONS' | 'CONNECT' | 'TRACE',
     body: string | undefined,
-    headers: Record<string, string> | null,
+    headers: Record<string, string[]> | null,
 }
 
 export type JsonBody = boolean | number | string | null | { [key: string]: JsonBody } | Array<JsonBody>;

@@ -6,10 +6,10 @@ import { getContents, StringRequest } from "@/scripts/files";
 import { RustResponse } from "@/scripts/requests";
 import { resizerFromDiv } from "@/scripts/elementResizer";
 
-import RequestEditor from "@/components/request_editor/index.vue";
-import ResponseView from "@/components/response_view/index.vue";
-import EnvironmentMenu from "@/components/environment_menu/index.vue";
-import EnvironmentSelector from "@/components/environment_selector/index.vue";
+import RequestEditor from "@/components/RequestEditor/index.vue";
+import ResponseView from "@/components/ResponseView/index.vue";
+import EnvironmentMenu from "@/components/EnvironmentMenu/index.vue";
+import EnvironmentSelector from "@/components/EnvironmentSelector/index.vue";
 
 onMounted(() => {
 	const resizerDiv = document.getElementById("middle_container");

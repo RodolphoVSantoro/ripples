@@ -4,7 +4,7 @@ import { PropType, Ref, ref, watch } from "vue";
 
 const props = defineProps({
     currentUrl: {
-        type: Object as PropType<string | null>,
+        type: String as PropType<string | null>,
         default: null,
     },
 });
@@ -43,10 +43,7 @@ const selected = ref(pasteFrom[0] as PasteFrom);
         </button>
     </div>
     <input placeholder="http://localhost:3000/test" class="url_input" v-model="url">
-    <button 
-        class="send_button"
-        @click="emitSend"
-    >
+    <button class="send_button" @click="emitSend">
         send
     </button>
 </template>
