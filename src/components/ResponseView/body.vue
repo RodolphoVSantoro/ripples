@@ -3,6 +3,7 @@
 import { PropType, computed, ref } from 'vue';
 
 import { RustResponse } from '@/scripts/requests';
+import { BodyType, getResponseContentType } from '@/scripts/requestEditor';
 
 
 const props = defineProps({
@@ -12,21 +13,17 @@ const props = defineProps({
     },
 });
 
-type ResponseType = 'json' | 'xml' | 'html' | 'text';
+
 const ContentTypes = ['application/json', 'application/xml', 'text/html'] as const;
 type ContentType = typeof ContentTypes[number];
 
-const responseType = computed((): ResponseType => {
-    const contentTypeHeadersString = String(props.response?.headers?.['content-type']);
-    const contentTypeHeaders = contentTypeHeadersString.split(';').map((s) => s.trim());
-
-    const contentTypes = contentTypeHeaders.filter((header) => ContentTypes.includes(header as ContentType)) as ContentType[];
-    const contentType = contentTypes[0] ?? undefined;
+const responseType = computed((): BodyType => {
+    const contentType = getResponseContentType(props.response);
     if (!contentType) {
         return 'text';
     }
 
-    const typeMap: Record<ContentType, ResponseType> = {
+    const typeMap: Record<ContentType, BodyType> = {
         'application/json': 'json',
         'application/xml': 'xml',
         'text/html': 'html',

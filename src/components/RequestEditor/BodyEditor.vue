@@ -1,57 +1,65 @@
 <script setup lang="ts">
 
-import { PropType, Ref, ref, watch } from 'vue';
+import { PropType, ref, computed } from 'vue';
 
 import JsonEditorVue from 'json-editor-vue';
 
-import { JsonBody } from '@/scripts/files';
+import { BodyType, JsonEditorContent } from '@/scripts/requestEditor.js';
 
 const props = defineProps({
+    bodyType: {
+        type: String as PropType<BodyType>,
+        default: undefined,
+    },
     currentBody: {
-        type: Object as PropType<string | undefined>,
+        type: Object as PropType<string>,
         default: undefined,
     },
 });
 
-const jsonBody: Ref<JsonBody | undefined> = ref(undefined);
 
-watch(() => props.currentBody, (newBody) => {
-    if (newBody) {
-        jsonBody.value = JSON.parse(newBody);
+const formattedBody = computed(() => {
+    if (!props.currentBody || !props.bodyType) {
+        return undefined;
     }
-    if (newBody === undefined) {
-        jsonBody.value = undefined;
+    if (props.bodyType === 'json') {
+        return JSON.parse(props.currentBody);
     }
-}, { immediate: true });
+    const textTypes = ['text', 'xml', 'html'];
+    if (textTypes.includes(props.bodyType)) {
+        return props.currentBody;
+    }
+});
 
-enum BodyTypes {
-    NO_BODY,
-    JSON,
-    XML,
-    TEXT
+function updateBody(content: JsonEditorContent) {
+    emit('updateBody', content);
 }
 
-const active = ref(BodyTypes.NO_BODY);
-function setActive(newActive: BodyTypes) {
-    active.value = newActive;
+function updateBodyType(bodyType?: BodyType) {
+    emit('changeBodyType', bodyType);
 }
+
+const emit = defineEmits(['updateBody', 'changeBodyType']);
 
 </script>
 
 <template>
     <div class="body_editor_container">
         <div class="body_edition_selector">
-            <button class="body_edition_selector_option" @click="setActive(BodyTypes.NO_BODY)">no body</button>
-            <button class="body_edition_selector_option" @click="setActive(BodyTypes.JSON)">json</button>
-            <button class="body_edition_selector_option" @click="setActive(BodyTypes.XML)">xml</button>
-            <button class="body_edition_selector_option" @click="setActive(BodyTypes.TEXT)">text</button>
+            <button class="body_edition_selector_option" @click="updateBodyType()">no body</button>
+            <button class="body_edition_selector_option" @click="updateBodyType('json')">json</button>
+            <button class="body_edition_selector_option" @click="updateBodyType('xml')">xml</button>
+            <button class="body_edition_selector_option" @click="updateBodyType('text')">text</button>
         </div>
         <div class="body_fields">
-            <div v-show="active === BodyTypes.NO_BODY" class="no_body_message">
+            <div v-show="!props.bodyType" class="no_body_message">
                 No body
             </div>
-            <div class="body_editor" v-show="active === BodyTypes.JSON">
-                <JsonEditorVue class="body_json_editor" v-model="jsonBody" />
+            <div class="body_editor" v-show="props?.bodyType === 'json'">
+                <JsonEditorVue class="body_json_editor" v-model="formattedBody" :onChange="updateBody" />
+            </div>
+            <div class="body_editor" v-show="props?.bodyType !== 'json'">
+                {{ formattedBody }}
             </div>
         </div>
     </div>

@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { PropType, Ref, ref, watch } from "vue";
+import { PropType, ref } from "vue";
 
 import { StringRequest } from "@/scripts/files";
 import { rustRequest } from "@/scripts/requests";
@@ -7,34 +7,35 @@ import { rustRequest } from "@/scripts/requests";
 import UrlEditor from "@/components/RequestEditor/UrlEditor.vue";
 import BodyEditor from "@/components/RequestEditor/BodyEditor.vue";
 import HeadersEditor from "@/components/RequestEditor/HeaderEditor.vue";
+import { BodyType, JsonEditorContent, contentTypeMap, ContentType, getRequestBodyType } from "@/scripts/requestEditor.js";
+import { computed } from "vue";
 
 
 const props = defineProps({
-    currentRequest: {
-        type: Object as PropType<StringRequest | null>,
-        default: null,
+    request: {
+        type: Object as PropType<StringRequest>,
+        default: (): StringRequest => ({
+            url: null,
+            method: 'GET',
+            headers: {},
+            body: undefined,
+        }),
     },
 });
 
-const request: Ref<StringRequest> = ref({
-    method: 'GET',
-    url: null,
-    headers: null,
-    body: undefined,
-});
+const bodyType = computed<BodyType | undefined>(() => contentTypeMap[getRequestBodyType(props.request) as ContentType]);
+// ref<BodyType | undefined>(contentTypeMap[getRequestBodyType(props.request) as ContentType]);
 
-const emit = defineEmits(['response']);
+const emit = defineEmits(['response', 'updateBody', 'changeBodyType', 'addHeader']);
 
 async function send() {
-    const response = await rustRequest(request.value);
+    const response = await rustRequest(props.request);
     emit('response', response);
 }
 
-watch(() => props.currentRequest, (newRequest) => {
-    if (newRequest !== null) {
-        request.value = newRequest;
-    }
-}, { immediate: true });
+function updateBody(content: JsonEditorContent) {
+    emit('updateBody', content);
+}
 
 enum Active {
     body,
@@ -48,14 +49,11 @@ function setActive(newActive: Active) {
 }
 
 function addHeader(key: string, value: string) {
-    if (!request.value.headers) {
-        request.value.headers = {};
-    }
-    if (!request.value.headers?.[key]) {
-        request.value.headers[key] = [value];
-    } else {
-        request.value.headers[key].push(value);
-    }
+    emit('addHeader', key, value);
+}
+
+function changeBodyType(bodyType?: BodyType) {
+    emit('changeBodyType', bodyType);
 }
 
 </script>
@@ -76,7 +74,8 @@ function addHeader(key: string, value: string) {
 
     <div class="request_editor_container">
         <div v-if="active === Active.body" class="body_editor">
-            <body-editor v-bind:current-body="request?.body" />
+            <body-editor v-bind:current-body="request?.body" v-bind:body-type="bodyType"
+                v-on:change-body-type="changeBodyType" v-on:update-body="updateBody" />
         </div>
 
         <div v-else-if="active === Active.headers" class="body_editor">

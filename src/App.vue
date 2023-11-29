@@ -10,6 +10,7 @@ import RequestEditor from "@/components/RequestEditor/index.vue";
 import ResponseView from "@/components/ResponseView/index.vue";
 import EnvironmentMenu from "@/components/EnvironmentMenu/index.vue";
 import EnvironmentSelector from "@/components/EnvironmentSelector/index.vue";
+import { JsonEditorContent } from "./scripts/requestEditor";
 
 onMounted(() => {
 	const resizerDiv = document.getElementById("middle_container");
@@ -35,11 +36,33 @@ function displayResponse(response: RustResponse) {
 function changeFile(contents: string) {
 	try {
 		const jsonRequest: StringRequest = JSON.parse(contents);
+		console.log(jsonRequest.headers);
 		currentRequest.value = jsonRequest;
 	} catch (error) {
 		console.error(`Failed to parse file contents as String Request, cause: ${error}`);
 	}
 }
+
+function addHeader(key: string, value: string) {
+	if (!currentRequest.value.headers) {
+		currentRequest.value.headers = {};
+	}
+	if (!currentRequest.value.headers?.[key]) {
+		currentRequest.value.headers[key] = [value];
+	} else {
+		currentRequest.value.headers[key].push(value);
+	}
+}
+
+function updateBody(content: JsonEditorContent) {
+	if (content.text) {
+		currentRequest.value.body = content.text;
+	}
+	if (content.json) {
+		currentRequest.value.body = JSON.stringify(content.json);
+	}
+}
+
 </script>
 
 <template>
@@ -58,7 +81,8 @@ function changeFile(contents: string) {
 			<div class="resizer"></div>
 
 			<div class="request_container horizontal_resize">
-				<request-editor v-bind:current-request="currentRequest" v-on:response="displayResponse" />
+				<request-editor v-bind:request="currentRequest" v-on:response="displayResponse" v-on:add-header="addHeader"
+					v-on:update-body="updateBody" />
 			</div>
 
 			<div class="resizer"></div>

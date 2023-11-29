@@ -2,7 +2,7 @@
     "url": "http://localhost:3000/sources/123",
     "method": "POST",
     "headers": {
-        "Content-Type": [
+        "content-Type": [
             "application/json"
         ],
         "x-user-id": [
