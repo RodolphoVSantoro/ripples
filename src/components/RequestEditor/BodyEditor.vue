@@ -17,7 +17,6 @@ const props = defineProps({
     },
 });
 
-
 const formattedBody = computed(() => {
     if (!props.currentBody || !props.bodyType) {
         return undefined;
