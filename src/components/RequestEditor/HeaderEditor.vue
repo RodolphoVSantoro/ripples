@@ -32,10 +32,10 @@ function deleteHeader(key: string, index: number) {
                 <v-text-field :model-value="value" :placeholder="'header'" outlined dense class="header_text_field" />
                 <v-text-field :model-value="key" :placeholder="'key'" outlined dense class="header_text_field" />
                 <v-btn icon class="header_button">
-                    <img :src="enabledIcon" class="header_button_icon" />
+                    <img :src="enabledIcon" class="header_button_icon" alt=""/>
                 </v-btn>
                 <v-btn icon class="header_button" @click="deleteHeader(key, index)">
-                    <img :src="trashIcon" class="header_button_icon" />
+                    <img :src="trashIcon" class="header_button_icon" alt="" />
                 </v-btn>
             </div>
 

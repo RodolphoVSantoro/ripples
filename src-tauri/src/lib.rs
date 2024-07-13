@@ -9,6 +9,7 @@ use serde::Serialize;
 use serde_json::json;
 use std::collections::HashMap;
 use std::env;
+use std::error::Error;
 use std::str::FromStr;
 use std::sync::{Arc, Mutex};
 use tauri::State;
@@ -52,6 +53,16 @@ struct ResponseType {
     url: String,
 }
 
+#[derive(Serialize)]
+struct  ErrorType {
+    name: String,
+    message: String,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    status: Option<u16>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    url: Option<String>,
+}
+
 fn convert_map(headers: &HeaderMap<HeaderValue>) -> HashMap<String, Vec<String>> {
     let mut header_hashmap = HashMap::new();
     for (k, v) in headers {
@@ -68,7 +79,7 @@ async fn send_request(
     method: String,
     headers: Option<HashMap<String, Vec<String>>>,
     body: Option<String>,
-) -> Result<ResponseType, String> {
+) -> Result<ResponseType, ErrorType> {
     let header_map = match headers {
         Some(headers) => {
             let mut header_map = HeaderMap::new();
@@ -92,7 +103,12 @@ async fn send_request(
         "PUT" => client.put(url),
         "PATCH" => client.patch(url),
         "DELETE" => client.delete(url),
-        method => return Err(format!("Method {:?}not supported", method).to_string()),
+        method => return Err(ErrorType {
+            name: "InvalidMethod".to_string(),
+            message: format!("Invalid method: {}", method),
+            status: None,
+            url: None,
+        }),
     };
     let client = match body {
         Some(body) => client.body(body),
@@ -102,7 +118,23 @@ async fn send_request(
     let response = client.headers(header_map).send().await;
     let response = match response {
         Ok(response) => response,
-        Err(e) => return Err(e.to_string()),
+        Err(e) if (e.is_timeout()) =>{
+            return  Err(ErrorType{
+                name: "Timeout".to_string(),
+                message: "Request timed out".to_string(),
+                status: None,
+                url: None,
+            });
+        }
+        Err(e) => {
+            let err = e.source().unwrap().to_string();
+            return Err(ErrorType{
+                name: e.to_string(),
+                message: err,
+                status: e.status().and_then(|s| Some(s.as_u16())),
+                url: e.url().and_then(|u| Some(u.to_string())),
+            });
+        },
     };
 
     let status = response.status().as_u16();

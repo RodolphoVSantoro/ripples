@@ -22,9 +22,6 @@ function isComponentVisible(component: MenuComponents) {
 
 const emit = defineEmits(['open-file']);
 
-const classes = 'selector_button';
-const show = true;
-
 </script>
 
 <template>
@@ -44,6 +41,7 @@ const show = true;
     </div>
 </template>
 <style scoped>
+
 .menu_selector {
     display: flex;
     flex-direction: row;
@@ -56,13 +54,13 @@ const show = true;
 .selector_button {
     color: white;
     background-color: var(--color-primary);
-    border-radius: 0.2rem;
     width: inherit;
     border-radius: 4px;
     margin: 0.15rem;
     font-size: 0.9rem;
     font-weight: 500;
     text-transform: uppercase;
+    line-height: normal;
 }
 
 
@@ -78,5 +76,31 @@ const show = true;
     position: relative;
     width: 100%;
     height: 100%;
+}
+
+@media screen and (max-width: 1200px) and (max-height: 800px) {
+    .selector_button {
+        border-radius: 3px;
+        font-size: 0.6rem;
+    }
+}
+
+
+@media screen and (max-width: 800px) and (max-height: 500px) {
+    .selector_button {
+        border-radius: 2px;
+        font-size: 0.4rem;
+    }
+}
+
+@media screen and (orientation: portrait) {
+    .selector_button {
+        border-radius: 0px;
+        margin: 0px;
+    }
+    .menu_selector {
+        flex-direction: column;
+        height: 10%;
+    }
 }
 </style>

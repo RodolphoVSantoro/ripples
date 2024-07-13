@@ -89,12 +89,14 @@ const emit = defineEmits(['updateBody', 'changeBodyType']);
 .body_edition_selector_option {
     color: white;
     background-color: var(--color-primary);
-    border-radius: 0.2rem;
     width: inherit;
+    height: 80%;
+    border-radius: 0.2rem;
     margin: 0.15rem;
     font-size: 0.9rem;
     font-weight: 500;
     text-transform: uppercase;
+    line-height: 0px;
 }
 
 .body_fields {
@@ -148,5 +150,52 @@ const emit = defineEmits(['updateBody', 'changeBodyType']);
     margin-left: 4%;
     margin-top: 2%;
     color: var(--color-primary);
+}
+
+@media screen and (max-width: 1200px) and (orientation: landscape) {
+    .body_edition_selector_option {
+        font-size: 0.6rem;
+        border-radius: 0.1rem;
+        margin: 0.08rem;
+    }
+    .body_json_editor {
+        font-size: 0.6rem;
+    }
+    .body_fields {
+        margin-top: 0.5%;
+    }
+    .no_body_message {
+        font-size: 1rem;
+    }
+}
+
+@media screen and (max-width: 800px) and (orientation: landscape) {
+    .body_edition_selector_option {
+        border-radius: 0.05rem;
+        margin: 0.04rem;
+        font-size: 0.4rem;
+    }
+    .body_json_editor {
+        font-size: 0.4rem;
+    }
+    .body_fields {
+        margin-top: 0.5%;
+    }
+
+    .no_body_message {
+        font-size: 0.6rem;
+    }
+}
+
+@media screen and (orientation: portrait) {
+    .body_edition_selector_option {
+        font-size: 0.6rem;
+    }
+    .body_json_editor {
+        font-size: 0.6rem;
+    }
+    .body_fields {
+        margin-top: 0.5%;
+    }
 }
 </style>

@@ -44,7 +44,7 @@ const selected = ref(pasteFrom[0] as PasteFrom);
     </div>
     <input placeholder="http://localhost:3000/test" class="url_input" v-model="url">
     <button class="send_button" @click="emitSend">
-        send
+        send    
     </button>
 </template>
 
@@ -63,9 +63,12 @@ const selected = ref(pasteFrom[0] as PasteFrom);
     color: white;
     background-color: var(--color-primary);
     width: 100%;
+    height: inherit;
     text-align: center;
     border-radius: 0.5rem;
     flex: auto;
+    font-size: 0.9rem;
+    line-height: 0px;
 }
 
 .url_input {
@@ -93,5 +96,37 @@ const selected = ref(pasteFrom[0] as PasteFrom);
     font-size: 0.9rem;
     font-weight: 500;
     text-transform: uppercase;
+    text-overflow: ellipsis;
+    line-height: 0px;
+}
+
+@media screen   and (max-width: 1200px) and (orientation: landscape) {
+    .send_button {
+        font-size: 0.6rem;
+    }
+    
+    .paste_select {
+        font-size: 0.6rem;
+    }
+    .paste_area {
+        height: 80%;
+    }
+}
+
+@media screen and (max-width: 800px) and (orientation: landscape) {
+    .paste_area {
+        height: 100%;
+    }
+}
+
+@media screen and (orientation: portrait) {
+    .send_button {
+        height: 50%;
+        width: 30%;
+    }
+    
+    .paste_area {
+        height: 100%;
+    }
 }
 </style>

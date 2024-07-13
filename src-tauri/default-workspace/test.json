@@ -1,5 +1,5 @@
 {
-    "url": "test.com",
+    "url": "a.com",
     "method": "POST",
     "headers": {
         "Content-Type": [

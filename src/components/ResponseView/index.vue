@@ -70,5 +70,29 @@ const props = defineProps({
     font-size: 0.9rem;
     font-weight: 500;
     text-transform: uppercase;
+    line-height: 0px;
+}
+
+@media screen and (orientation: portrait) {
+    .response_view_selector {
+        justify-content: space-around;
+        background-color: white;
+        height: 5%;
+        width: 100%;
+        overflow: scroll;
+    }
+
+    .response_view_selector_option {
+        color: white;
+        background-color: var(--color-primary);
+        border-radius: 0.2rem;
+        width: inherit;
+        border-radius: 4px;
+        margin: 0.15rem;
+        font-size: 0.9rem;
+        font-weight: 500;
+        text-transform: uppercase;
+    }
+    
 }
 </style>

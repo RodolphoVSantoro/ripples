@@ -114,6 +114,7 @@ function changeBodyType(bodyType?: BodyType) {
     font-size: 0.9rem;
     font-weight: 500;
     text-transform: uppercase;
+    line-height: 0px;
 }
 
 .request_editor_container {
