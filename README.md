@@ -3,11 +3,11 @@
 ## Save and send requests to test/use SOAP/REST API's
 Manage your workspace, import and export as curl.
 
-## Building
-run:
-- nvm use;yarn;yarn tauri dev
+## pre-requisites: 
+### https://tauri.app/v1/guides/getting-started/prerequisites/
 
-## Running
-Download the appImage or msi from the following links
-- 
-- 
+## Building
+- installing
+  - nvm use; yarn
+- run:
+  - nvm use; yarn tauri dev
