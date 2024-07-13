@@ -11,3 +11,8 @@ run:
 Download the appImage or msi from the following links
 - 
 - 
+
+## Building android apk
+run:
+- source ./prepare-env.sh
+- yarn tauri android build
